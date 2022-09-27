@@ -9,6 +9,9 @@ from ..concrete.q6_r_and_rr import Q6RAndRr
 from ..concrete.q6_r_or_ri import Q6ROrRi
 from ..concrete.q6_r_or_rnr import Q6ROrRnr
 from ..concrete.q6_r_or_rr import Q6ROrRr
+from ..concrete.q6_r_sub_ir import Q6RSubIr
+from ..concrete.q6_r_sub_rr import Q6RSubRr
+from ..concrete.q6_r_sub_rr_sat import Q6RSubRrSat
 from ..concrete.q6_r_xor_rr import Q6RXorRr
 
 
@@ -24,6 +27,8 @@ def decode_alu_32_class(instruction):
             return Q6ROrRi.from_int(instruction)
         if maj_op == 0b111 and rs:
             return Nop.from_int(instruction)
+        if maj_op == 0b110 and ((min_op >> 1) == 0b01):
+            return Q6RSubIr.from_int(instruction)
     elif iclass == 0b1011:
         return Q6RAddRi.from_int(instruction)
     elif iclass == 0b1111:
@@ -43,3 +48,7 @@ def decode_alu_32_class(instruction):
             return Q6RAndRnr.from_int(instruction)
         if maj_op == 0b001 and min_op == 0b101:
             return Q6ROrRnr.from_int(instruction)
+        if maj_op == 0b011 and min_op == 0b001:
+            return Q6RSubRr.from_int(instruction)
+        if maj_op == 0b110 and min_op == 0b110:
+            return Q6RSubRrSat.from_int(instruction)

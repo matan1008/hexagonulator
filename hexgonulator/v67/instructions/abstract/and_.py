@@ -12,9 +12,9 @@ class And(Instruction):
 
     def execute(self, processor):
         rs = processor.registers.general[self.s]
-        arg2 = self.imm10 if self.imm10 is not None else processor.registers.general[self.t]
+        arg2 = to_unsigned(self.imm10, 32) if self.imm10 is not None else processor.registers.general[self.t]
         yield
-        result = to_unsigned(rs & arg2, 32)
+        result = rs & arg2
         yield
         processor.registers.general[self.d] = result
         yield

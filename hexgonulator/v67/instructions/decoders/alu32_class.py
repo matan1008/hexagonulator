@@ -29,7 +29,6 @@ def decode_alu_32_class(instruction):
     elif iclass == 0b1111:
         maj_op = substring(instruction, 26, 24)
         min_op = substring(instruction, 23, 21)
-
         if maj_op == 0b011 and min_op == 0b000:
             return Q6RAddRr.from_int(instruction)
         if maj_op == 0b110 and min_op == 0b010:

@@ -1,4 +1,5 @@
-from hexgonulator.common.bits_ops import substring
+from hexgonulator.common.bits_ops import substring, bit_at
+from ..concrete.nop import Nop
 from ..concrete.q6_r_add_ri import Q6RAddRi
 from ..concrete.q6_r_add_rr import Q6RAddRr
 from ..concrete.q6_r_add_rr_sat import Q6RAddRrSat
@@ -16,15 +17,19 @@ def decode_alu_32_class(instruction):
     if iclass == 0b0111:
         maj_op = substring(instruction, 26, 24)
         min_op = substring(instruction, 23, 21)
+        rs = bit_at(instruction, 27)
         if maj_op == 0b110 and ((min_op >> 1) == 0b00):
             return Q6RAndRi.from_int(instruction)
         if maj_op == 0b110 and ((min_op >> 1) == 0b10):
             return Q6ROrRi.from_int(instruction)
+        if maj_op == 0b111 and rs:
+            return Nop.from_int(instruction)
     elif iclass == 0b1011:
         return Q6RAddRi.from_int(instruction)
     elif iclass == 0b1111:
         maj_op = substring(instruction, 26, 24)
         min_op = substring(instruction, 23, 21)
+
         if maj_op == 0b011 and min_op == 0b000:
             return Q6RAddRr.from_int(instruction)
         if maj_op == 0b110 and min_op == 0b010:

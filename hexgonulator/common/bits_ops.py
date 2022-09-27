@@ -53,3 +53,7 @@ def signed_sat_q(i: int, n: int):
         result = i
         saturated = False
     return to_unsigned(result, n), saturated
+
+
+def sign_extend(x: int, src_length: int, dst_length: int) -> int:
+    return to_unsigned(to_signed(x, src_length), dst_length)

@@ -6,6 +6,7 @@ from ..concrete.q6_r_and_ri import Q6RAndRi
 from ..concrete.q6_r_and_rr import Q6RAndRr
 from ..concrete.q6_r_or_ri import Q6ROrRi
 from ..concrete.q6_r_or_rr import Q6ROrRr
+from ..concrete.q6_r_xor_rr import Q6RXorRr
 
 
 def decode_alu_32_class(instruction):
@@ -30,3 +31,5 @@ def decode_alu_32_class(instruction):
             return Q6RAndRr.from_int(instruction)
         if maj_op == 0b001 and min_op == 0b001:
             return Q6ROrRr.from_int(instruction)
+        if maj_op == 0b001 and min_op == 0b011:
+            return Q6RXorRr.from_int(instruction)

@@ -55,5 +55,18 @@ def signed_sat_q(i: int, n: int):
     return to_unsigned(result, n), saturated
 
 
+def unsigned_sat_q(i: int, n: int):
+    if i > (2 ** n - 1):
+        result = 2 ** n - 1
+        saturated = True
+    elif i < 0:
+        result = 0
+        saturated = True
+    else:
+        result = i
+        saturated = False
+    return result, saturated
+
+
 def sign_extend(x: int, src_length: int, dst_length: int) -> int:
     return to_unsigned(to_signed(x, src_length), dst_length)

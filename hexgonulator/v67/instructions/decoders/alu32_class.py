@@ -16,6 +16,9 @@ from ..concrete.q6_r_sub_rr import Q6RSubRr
 from ..concrete.q6_r_sub_rr_sat import Q6RSubRrSat
 from ..concrete.q6_r_sxtb_r import Q6RSxtbR
 from ..concrete.q6_r_sxth_r import Q6RSxthR
+from ..concrete.q6_r_vaddh_rr import Q6RVddhRr
+from ..concrete.q6_r_vaddh_rr_sat import Q6RVddhRrSat
+from ..concrete.q6_r_vadduh_rr_sat import Q6RVdduhRrSat
 from ..concrete.q6_r_xor_rr import Q6RXorRr
 from ..concrete.q6_rh_equals_i import Q6RhEqualsI
 from ..concrete.q6_rl_equals_i import Q6RlEqualsI
@@ -70,3 +73,9 @@ def decode_alu_32_class(instruction):
             return Q6RSubRr.from_int(instruction)
         if maj_op == 0b110 and min_op == 0b110:
             return Q6RSubRrSat.from_int(instruction)
+        if maj_op == 0b110 and min_op == 0b000:
+            return Q6RVddhRr.from_int(instruction)
+        if maj_op == 0b110 and min_op == 0b001:
+            return Q6RVddhRrSat.from_int(instruction)
+        if maj_op == 0b110 and min_op == 0b011:
+            return Q6RVdduhRrSat.from_int(instruction)

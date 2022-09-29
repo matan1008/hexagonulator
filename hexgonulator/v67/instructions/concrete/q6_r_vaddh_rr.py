@@ -2,7 +2,7 @@ from hexgonulator.common.bits_ops import substring
 from ..abstract.vector_add_halfwords import VectorAddHalfwords
 
 
-class Q6RVddhRr(VectorAddHalfwords):
+class Q6RVaddhRr(VectorAddHalfwords):
     @classmethod
     def from_int(cls, instr):
         s = substring(instr, 20, 16)

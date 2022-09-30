@@ -12,7 +12,10 @@ def test_substring(bits: int, msb: int, lsb: int, result: int):
 
 @pytest.mark.parametrize('bits, length, result', [
     (-1, 16, 0xffff),
+    (0xffff, 16, 0xffff),
     (-2, 16, 0xfffe),
+    (0xfffe, 16, 0xfffe),
+    (2, 16, 2),
 ])
 def test_to_unsigned(bits: int, length: int, result: int):
     assert to_unsigned(bits, length) == result

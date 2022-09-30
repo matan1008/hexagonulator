@@ -1,4 +1,4 @@
-from hexgonulator.common.bits_ops import substring, chain, to_signed
+from hexgonulator.common.bits_ops import substring
 from ..abstract.add import Add
 
 

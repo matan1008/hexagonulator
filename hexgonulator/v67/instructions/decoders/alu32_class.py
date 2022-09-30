@@ -1,11 +1,20 @@
 from hexgonulator.common.bits_ops import substring, bit_at
 from ..concrete.nop import Nop
+from ..concrete.q6_p_combine_ii import Q6PCombineIi
+from ..concrete.q6_p_combine_ii_unsigned import Q6PCombineIiUnsigned
+from ..concrete.q6_p_combine_ir import Q6PCombineIr
+from ..concrete.q6_p_combine_ri import Q6PCombineRi
+from ..concrete.q6_p_combine_rr import Q6PCombineRr
 from ..concrete.q6_r_add_ri import Q6RAddRi
 from ..concrete.q6_r_add_rr import Q6RAddRr
 from ..concrete.q6_r_add_rr_sat import Q6RAddRrSat
 from ..concrete.q6_r_and_ri import Q6RAndRi
 from ..concrete.q6_r_and_rnr import Q6RAndRnr
 from ..concrete.q6_r_and_rr import Q6RAndRr
+from ..concrete.q6_r_combine_rhrh import Q6RCombineRhrh
+from ..concrete.q6_r_combine_rhrl import Q6RCombineRhrl
+from ..concrete.q6_r_combine_rlrh import Q6RCombineRlrh
+from ..concrete.q6_r_combine_rlrl import Q6RCombineRlrl
 from ..concrete.q6_r_equals_i import Q6REqualsI
 from ..concrete.q6_r_equals_r import Q6REqualsR
 from ..concrete.q6_r_or_ri import Q6ROrRi
@@ -59,6 +68,14 @@ def decode_alu_32_class(instruction):
             return Q6REqualsR
         if maj_op == 0b000 and min_op == 0b110:
             return Q6RZxthR
+        if maj_op == 0b100 and ((min_op >> 2) == 0b0):
+            return Q6PCombineIi
+        if maj_op == 0b100 and ((min_op >> 2) == 0b1):
+            return Q6PCombineIiUnsigned
+        if maj_op == 0b011 and ((min_op & 3) == 0b01):
+            return Q6PCombineIr
+        if maj_op == 0b011 and ((min_op & 3) == 0b00):
+            return Q6PCombineRi
     elif iclass == 0b1011:
         return Q6RAddRi
     elif iclass == 0b1111:
@@ -100,3 +117,13 @@ def decode_alu_32_class(instruction):
             return Q6RVsubhRrSat
         if maj_op == 0b110 and min_op == 0b111:
             return Q6RVsubuhRrSat
+        if maj_op == 0b011 and min_op == 0b100:
+            return Q6RCombineRhrh
+        if maj_op == 0b011 and min_op == 0b101:
+            return Q6RCombineRhrl
+        if maj_op == 0b011 and min_op == 0b110:
+            return Q6RCombineRlrh
+        if maj_op == 0b011 and min_op == 0b111:
+            return Q6RCombineRlrl
+        if maj_op == 0b101 and ((min_op >> 2) == 0b0):
+            return Q6PCombineRr

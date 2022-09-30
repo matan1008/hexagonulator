@@ -9,8 +9,8 @@ OPCODE_ADDR = 0x80000000
 
 @pytest.fixture()
 def hexagon():
-    mem = RAM(4)
+    mem = RAM(8)
     proc = HexagonV67()
-    proc.memory.controllers.append(MemoryController(mem, start=OPCODE_ADDR, end=OPCODE_ADDR + 4))
+    proc.memory.controllers.append(MemoryController(mem, start=OPCODE_ADDR, end=OPCODE_ADDR + 8))
     proc.registers.pc = OPCODE_ADDR
     return proc

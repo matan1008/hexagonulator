@@ -4,7 +4,7 @@ from ..abstract.and_not import AndNot
 
 class Q6RAndRnr(AndNot):
     @classmethod
-    def from_int(cls, instr):
+    def from_int(cls, instr, apply_extension=None):
         s = substring(instr, 20, 16)
         t = substring(instr, 12, 8)
         d = substring(instr, 4, 0)

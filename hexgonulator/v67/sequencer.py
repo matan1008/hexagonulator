@@ -11,6 +11,8 @@ class Sequencer:
         seq = [None, None, None, None]
         lowest_occupied = 4
         for instruction in instructions:
+            if instruction.iclass == 0b0000:
+                continue
             for slot in range(lowest_occupied - 1, -1, -1):
                 if instruction.iclass in SLOTS_ICLASSES[slot]:
                     seq[slot] = instruction

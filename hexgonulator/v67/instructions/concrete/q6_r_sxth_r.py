@@ -4,7 +4,7 @@ from ..abstract.sxth import Sxth
 
 class Q6RSxthR(Sxth):
     @classmethod
-    def from_int(cls, instr):
+    def from_int(cls, instr, apply_extension=None):
         s = substring(instr, 20, 16)
         d = substring(instr, 4, 0)
         return cls(instr, d=d, s=s)

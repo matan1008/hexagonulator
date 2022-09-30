@@ -38,65 +38,65 @@ def decode_alu_32_class(instruction):
         min_op = substring(instruction, 23, 21)
         rs = bit_at(instruction, 27)
         if maj_op == 0b110 and ((min_op >> 1) == 0b00):
-            return Q6RAndRi.from_int(instruction)
+            return Q6RAndRi
         if maj_op == 0b110 and ((min_op >> 1) == 0b10):
-            return Q6ROrRi.from_int(instruction)
+            return Q6ROrRi
         if maj_op == 0b111 and rs:
-            return Nop.from_int(instruction)
+            return Nop
         if maj_op == 0b110 and ((min_op >> 1) == 0b01):
-            return Q6RSubIr.from_int(instruction)
+            return Q6RSubIr
         if maj_op == 0b000 and min_op == 0b101:
-            return Q6RSxtbR.from_int(instruction)
+            return Q6RSxtbR
         if maj_op == 0b000 and min_op == 0b111:
-            return Q6RSxthR.from_int(instruction)
+            return Q6RSxthR
         if maj_op == 0b000 and rs:
-            return Q6REqualsI.from_int(instruction)
+            return Q6REqualsI
         if maj_op == 0b010 and min_op & 1 == 1:
-            return Q6RhEqualsI.from_int(instruction)
+            return Q6RhEqualsI
         if maj_op == 0b001 and min_op & 1 == 1:
-            return Q6RlEqualsI.from_int(instruction)
+            return Q6RlEqualsI
         if maj_op == 0b000 and min_op == 0b011:
-            return Q6REqualsR.from_int(instruction)
+            return Q6REqualsR
         if maj_op == 0b000 and min_op == 0b110:
-            return Q6RZxthR.from_int(instruction)
+            return Q6RZxthR
     elif iclass == 0b1011:
-        return Q6RAddRi.from_int(instruction)
+        return Q6RAddRi
     elif iclass == 0b1111:
         maj_op = substring(instruction, 26, 24)
         min_op = substring(instruction, 23, 21)
         if maj_op == 0b011 and min_op == 0b000:
-            return Q6RAddRr.from_int(instruction)
+            return Q6RAddRr
         if maj_op == 0b110 and min_op == 0b010:
-            return Q6RAddRrSat.from_int(instruction)
+            return Q6RAddRrSat
         if maj_op == 0b001 and min_op == 0b000:
-            return Q6RAndRr.from_int(instruction)
+            return Q6RAndRr
         if maj_op == 0b001 and min_op == 0b001:
-            return Q6ROrRr.from_int(instruction)
+            return Q6ROrRr
         if maj_op == 0b001 and min_op == 0b011:
-            return Q6RXorRr.from_int(instruction)
+            return Q6RXorRr
         if maj_op == 0b001 and min_op == 0b100:
-            return Q6RAndRnr.from_int(instruction)
+            return Q6RAndRnr
         if maj_op == 0b001 and min_op == 0b101:
-            return Q6ROrRnr.from_int(instruction)
+            return Q6ROrRnr
         if maj_op == 0b011 and min_op == 0b001:
-            return Q6RSubRr.from_int(instruction)
+            return Q6RSubRr
         if maj_op == 0b110 and min_op == 0b110:
-            return Q6RSubRrSat.from_int(instruction)
+            return Q6RSubRrSat
         if maj_op == 0b110 and min_op == 0b000:
-            return Q6RVaddhRr.from_int(instruction)
+            return Q6RVaddhRr
         if maj_op == 0b110 and min_op == 0b001:
-            return Q6RVaddhRrSat.from_int(instruction)
+            return Q6RVaddhRrSat
         if maj_op == 0b110 and min_op == 0b011:
-            return Q6RVadduhRrSat.from_int(instruction)
+            return Q6RVadduhRrSat
         if maj_op == 0b111 and min_op == 0b000:
-            return Q6RVavghRr.from_int(instruction)
+            return Q6RVavghRr
         if maj_op == 0b111 and min_op == 0b001:
-            return Q6RVavghRrRnd.from_int(instruction)
+            return Q6RVavghRrRnd
         if maj_op == 0b111 and min_op == 0b011:
-            return Q6RVnavghRrRnd.from_int(instruction)
+            return Q6RVnavghRrRnd
         if maj_op == 0b110 and min_op == 0b100:
-            return Q6RVsubhRr.from_int(instruction)
+            return Q6RVsubhRr
         if maj_op == 0b110 and min_op == 0b101:
-            return Q6RVsubhRrSat.from_int(instruction)
+            return Q6RVsubhRrSat
         if maj_op == 0b110 and min_op == 0b111:
-            return Q6RVsubuhRrSat.from_int(instruction)
+            return Q6RVsubuhRrSat

@@ -4,7 +4,7 @@ from ..abstract.transfer_register import TransferRegister
 
 class Q6REqualsR(TransferRegister):
     @classmethod
-    def from_int(cls, instr):
+    def from_int(cls, instr, apply_extension=None):
         d = substring(instr, 4, 0)
         s = substring(instr, 20, 16)
         return cls(instr, d=d, s=s)

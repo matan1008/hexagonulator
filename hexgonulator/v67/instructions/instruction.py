@@ -8,7 +8,7 @@ class Instruction(ABC):
         self.instr = instr
 
     @classmethod
-    def from_int(cls, instr):
+    def from_int(cls, instr, apply_extension=None):
         pass
 
     @property

@@ -1,5 +1,3 @@
-
-
 class MemoryController:
     """
     One memory or i/o device
@@ -9,4 +7,3 @@ class MemoryController:
         self.mem = mem
         self.start = start
         self.end = end
-

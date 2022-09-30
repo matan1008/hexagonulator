@@ -7,4 +7,4 @@ class Nop(_Nop):
         return cls(instr)
 
     def __repr__(self):
-        return f'nop'
+        return 'nop'

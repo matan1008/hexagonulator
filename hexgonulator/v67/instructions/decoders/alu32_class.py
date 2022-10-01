@@ -11,6 +11,8 @@ from ..concrete.q6_r_add_rr_sat import Q6RAddRrSat
 from ..concrete.q6_r_and_ri import Q6RAndRi
 from ..concrete.q6_r_and_rnr import Q6RAndRnr
 from ..concrete.q6_r_and_rr import Q6RAndRr
+from ..concrete.q6_r_aslh_r import Q6RAslhR
+from ..concrete.q6_r_asrh_r import Q6RAsrhR
 from ..concrete.q6_r_combine_rhrh import Q6RCombineRhrh
 from ..concrete.q6_r_combine_rhrl import Q6RCombineRhrl
 from ..concrete.q6_r_combine_rlrh import Q6RCombineRlrh
@@ -86,6 +88,10 @@ def decode_alu_32_class(instruction):
             return Q6RMuxPir
         if not rs and maj_op == 0b011 and not bit_at(instruction, 23) and not bit_at(instruction, 13):
             return Q6RMuxPri
+        if not rs and maj_op == 0b000 and min_op == 0b000 and not bit_at(instruction, 13):
+            return Q6RAslhR
+        if not rs and maj_op == 0b000 and min_op == 0b001 and not bit_at(instruction, 13):
+            return Q6RAsrhR
     elif iclass == 0b1011:
         return Q6RAddRi
     elif iclass == 0b1111:

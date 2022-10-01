@@ -5,6 +5,7 @@ from ..concrete.q6_p_combine_ii_unsigned import Q6PCombineIiUnsigned
 from ..concrete.q6_p_combine_ir import Q6PCombineIr
 from ..concrete.q6_p_combine_ri import Q6PCombineRi
 from ..concrete.q6_p_combine_rr import Q6PCombineRr
+from ..concrete.q6_p_packhl_rr import Q6PPackhlRr
 from ..concrete.q6_r_add_ri import Q6RAddRi
 from ..concrete.q6_r_add_rr import Q6RAddRr
 from ..concrete.q6_r_add_rr_sat import Q6RAddRrSat
@@ -145,3 +146,5 @@ def decode_alu_32_class(instruction):
             return Q6PCombineRr
         if maj_op == 0b100:
             return Q6RMuxPrr
+        if maj_op == 0b101 and ((min_op >> 2) == 0b1):
+            return Q6PPackhlRr

@@ -16,7 +16,7 @@ class UserStatusRegister:
 
 class Registers:
     def __init__(self):
-        self.general = [0x00000000 for _ in range(31)]
+        self.general = [0x00000000 for _ in range(32)]
         # The user status register (USR) stores processor status and control bits that are accessible by user programs.
         self.usr = UserStatusRegister()
         # The Program Counter (PC) register points to the next instruction packet to execute.

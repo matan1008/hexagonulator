@@ -17,6 +17,10 @@ from ..concrete.q6_r_combine_rlrh import Q6RCombineRlrh
 from ..concrete.q6_r_combine_rlrl import Q6RCombineRlrl
 from ..concrete.q6_r_equals_i import Q6REqualsI
 from ..concrete.q6_r_equals_r import Q6REqualsR
+from ..concrete.q6_r_mux_pii import Q6RMuxPii
+from ..concrete.q6_r_mux_pir import Q6RMuxPir
+from ..concrete.q6_r_mux_pri import Q6RMuxPri
+from ..concrete.q6_r_mux_prr import Q6RMuxPrr
 from ..concrete.q6_r_or_ri import Q6ROrRi
 from ..concrete.q6_r_or_rnr import Q6ROrRnr
 from ..concrete.q6_r_or_rr import Q6ROrRr
@@ -60,22 +64,28 @@ def decode_alu_32_class(instruction):
             return Q6RSxthR
         if maj_op == 0b000 and rs:
             return Q6REqualsI
-        if maj_op == 0b010 and min_op & 1 == 1:
+        if not rs and maj_op == 0b010 and min_op & 1 == 1:
             return Q6RhEqualsI
-        if maj_op == 0b001 and min_op & 1 == 1:
+        if not rs and maj_op == 0b001 and min_op & 1 == 1:
             return Q6RlEqualsI
-        if maj_op == 0b000 and min_op == 0b011:
+        if not rs and maj_op == 0b000 and min_op == 0b011:
             return Q6REqualsR
         if maj_op == 0b000 and min_op == 0b110:
             return Q6RZxthR
-        if maj_op == 0b100 and ((min_op >> 2) == 0b0):
+        if rs and maj_op == 0b100 and ((min_op >> 2) == 0b0):
             return Q6PCombineIi
-        if maj_op == 0b100 and ((min_op >> 2) == 0b1):
+        if rs and maj_op == 0b100 and ((min_op >> 2) == 0b1):
             return Q6PCombineIiUnsigned
-        if maj_op == 0b011 and ((min_op & 3) == 0b01):
+        if not rs and maj_op == 0b011 and ((min_op & 3) == 0b01) and bit_at(instruction, 13):
             return Q6PCombineIr
-        if maj_op == 0b011 and ((min_op & 3) == 0b00):
+        if not rs and maj_op == 0b011 and ((min_op & 3) == 0b00) and bit_at(instruction, 13):
             return Q6PCombineRi
+        if rs and (maj_op >> 1) == 0b01:
+            return Q6RMuxPii
+        if not rs and maj_op == 0b011 and bit_at(instruction, 23) and not bit_at(instruction, 13):
+            return Q6RMuxPir
+        if not rs and maj_op == 0b011 and not bit_at(instruction, 23) and not bit_at(instruction, 13):
+            return Q6RMuxPri
     elif iclass == 0b1011:
         return Q6RAddRi
     elif iclass == 0b1111:
@@ -127,3 +137,5 @@ def decode_alu_32_class(instruction):
             return Q6RCombineRlrl
         if maj_op == 0b101 and ((min_op >> 2) == 0b0):
             return Q6PCombineRr
+        if maj_op == 0b100:
+            return Q6RMuxPrr

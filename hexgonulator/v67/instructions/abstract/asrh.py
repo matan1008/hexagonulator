@@ -1,4 +1,4 @@
-from hexgonulator.common.bits_ops import lower_chunk, sign_extend
+from hexgonulator.common.bits_ops import sign_extend
 from hexgonulator.v67.instructions.instruction import Instruction
 
 

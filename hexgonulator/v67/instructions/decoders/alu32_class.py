@@ -1,4 +1,12 @@
 from hexgonulator.common.bits_ops import substring, bit_at
+from ..concrete.conditional_add_imm import ConditionalAddImm
+from ..concrete.conditional_add_new_imm import ConditionalAddNewImm
+from ..concrete.conditional_add_new_reg import ConditionalAddNewReg
+from ..concrete.conditional_add_not_imm import ConditionalAddNotImm
+from ..concrete.conditional_add_not_new_imm import ConditionalAddNotNewImm
+from ..concrete.conditional_add_not_new_reg import ConditionalAddNotNewReg
+from ..concrete.conditional_add_not_reg import ConditionalAddNotReg
+from ..concrete.conditional_add_reg import ConditionalAddReg
 from ..concrete.nop import Nop
 from ..concrete.q6_p_combine_ii import Q6PCombineIi
 from ..concrete.q6_p_combine_ii_unsigned import Q6PCombineIiUnsigned
@@ -93,14 +101,23 @@ def decode_alu_32_class(instruction):
             return Q6RAslhR
         if not rs and maj_op == 0b000 and min_op == 0b001 and not bit_at(instruction, 13):
             return Q6RAsrhR
+        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b0) and not bit_at(instruction, 13):
+            return ConditionalAddImm
+        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b0) and bit_at(instruction, 13):
+            return ConditionalAddNewImm
+        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b1) and not bit_at(instruction, 13):
+            return ConditionalAddNotImm
+        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b1) and bit_at(instruction, 13):
+            return ConditionalAddNotNewImm
     elif iclass == 0b1011:
         return Q6RAddRi
     elif iclass == 0b1111:
         maj_op = substring(instruction, 26, 24)
         min_op = substring(instruction, 23, 21)
-        if maj_op == 0b011 and min_op == 0b000:
+        p = bit_at(instruction, 27)
+        if not p and maj_op == 0b011 and min_op == 0b000:
             return Q6RAddRr
-        if maj_op == 0b110 and min_op == 0b010:
+        if not p and maj_op == 0b110 and min_op == 0b010:
             return Q6RAddRrSat
         if maj_op == 0b001 and min_op == 0b000:
             return Q6RAndRr
@@ -148,3 +165,11 @@ def decode_alu_32_class(instruction):
             return Q6RMuxPrr
         if maj_op == 0b101 and ((min_op >> 2) == 0b1):
             return Q6PPackhlRr
+        if p and maj_op == 0b011 and min_op == 0b000 and not bit_at(instruction, 13) and not bit_at(instruction, 7):
+            return ConditionalAddReg
+        if p and maj_op == 0b011 and min_op == 0b000 and not bit_at(instruction, 13) and bit_at(instruction, 7):
+            return ConditionalAddNotReg
+        if p and maj_op == 0b011 and min_op == 0b000 and bit_at(instruction, 13) and not bit_at(instruction, 7):
+            return ConditionalAddNewReg
+        if p and maj_op == 0b011 and min_op == 0b000 and bit_at(instruction, 13) and bit_at(instruction, 7):
+            return ConditionalAddNotNewReg

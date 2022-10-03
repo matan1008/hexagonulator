@@ -7,6 +7,14 @@ from ..concrete.conditional_add_not_new_imm import ConditionalAddNotNewImm
 from ..concrete.conditional_add_not_new_reg import ConditionalAddNotNewReg
 from ..concrete.conditional_add_not_reg import ConditionalAddNotReg
 from ..concrete.conditional_add_reg import ConditionalAddReg
+from ..concrete.conditional_aslh import ConditionalAslh
+from ..concrete.conditional_aslh_new import ConditionalAslhNew
+from ..concrete.conditional_aslh_not import ConditionalAslhNot
+from ..concrete.conditional_aslh_not_new import ConditionalAslhNotNew
+from ..concrete.conditional_asrh import ConditionalAsrh
+from ..concrete.conditional_asrh_new import ConditionalAsrhNew
+from ..concrete.conditional_asrh_not import ConditionalAsrhNot
+from ..concrete.conditional_asrh_not_new import ConditionalAsrhNotNew
 from ..concrete.nop import Nop
 from ..concrete.q6_p_combine_ii import Q6PCombineIi
 from ..concrete.q6_p_combine_ii_unsigned import Q6PCombineIiUnsigned
@@ -61,6 +69,7 @@ def decode_alu_32_class(instruction):
         maj_op = substring(instruction, 26, 24)
         min_op = substring(instruction, 23, 21)
         rs = bit_at(instruction, 27)
+        bit_13 = bit_at(instruction, 13)
         if maj_op == 0b110 and ((min_op >> 1) == 0b00):
             return Q6RAndRi
         if maj_op == 0b110 and ((min_op >> 1) == 0b10):
@@ -87,28 +96,44 @@ def decode_alu_32_class(instruction):
             return Q6PCombineIi
         if rs and maj_op == 0b100 and ((min_op >> 2) == 0b1):
             return Q6PCombineIiUnsigned
-        if not rs and maj_op == 0b011 and ((min_op & 3) == 0b01) and bit_at(instruction, 13):
+        if not rs and maj_op == 0b011 and ((min_op & 3) == 0b01) and bit_13:
             return Q6PCombineIr
-        if not rs and maj_op == 0b011 and ((min_op & 3) == 0b00) and bit_at(instruction, 13):
+        if not rs and maj_op == 0b011 and ((min_op & 3) == 0b00) and bit_13:
             return Q6PCombineRi
         if rs and (maj_op >> 1) == 0b01:
             return Q6RMuxPii
-        if not rs and maj_op == 0b011 and bit_at(instruction, 23) and not bit_at(instruction, 13):
+        if not rs and maj_op == 0b011 and bit_at(instruction, 23) and not bit_13:
             return Q6RMuxPir
-        if not rs and maj_op == 0b011 and not bit_at(instruction, 23) and not bit_at(instruction, 13):
+        if not rs and maj_op == 0b011 and not bit_at(instruction, 23) and not bit_13:
             return Q6RMuxPri
-        if not rs and maj_op == 0b000 and min_op == 0b000 and not bit_at(instruction, 13):
+        if not rs and maj_op == 0b000 and min_op == 0b000 and not bit_13:
             return Q6RAslhR
-        if not rs and maj_op == 0b000 and min_op == 0b001 and not bit_at(instruction, 13):
+        if not rs and maj_op == 0b000 and min_op == 0b001 and not bit_13:
             return Q6RAsrhR
-        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b0) and not bit_at(instruction, 13):
+        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b0) and not bit_13:
             return ConditionalAddImm
-        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b0) and bit_at(instruction, 13):
+        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b0) and bit_13:
             return ConditionalAddNewImm
-        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b1) and not bit_at(instruction, 13):
+        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b1) and not bit_13:
             return ConditionalAddNotImm
-        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b1) and bit_at(instruction, 13):
+        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b1) and bit_13:
             return ConditionalAddNotNewImm
+        if not rs and maj_op == 0b000 and min_op == 0b000 and bit_13 and substring(instruction, 11, 10) == 0b00:
+            return ConditionalAslh
+        if not rs and maj_op == 0b000 and min_op == 0b000 and bit_13 and substring(instruction, 11, 10) == 0b01:
+            return ConditionalAslhNew
+        if not rs and maj_op == 0b000 and min_op == 0b000 and bit_13 and substring(instruction, 11, 10) == 0b10:
+            return ConditionalAslhNot
+        if not rs and maj_op == 0b000 and min_op == 0b000 and bit_13 and substring(instruction, 11, 10) == 0b11:
+            return ConditionalAslhNotNew
+        if not rs and maj_op == 0b000 and min_op == 0b001 and bit_13 and substring(instruction, 11, 10) == 0b00:
+            return ConditionalAsrh
+        if not rs and maj_op == 0b000 and min_op == 0b001 and bit_13 and substring(instruction, 11, 10) == 0b01:
+            return ConditionalAsrhNew
+        if not rs and maj_op == 0b000 and min_op == 0b001 and bit_13 and substring(instruction, 11, 10) == 0b10:
+            return ConditionalAsrhNot
+        if not rs and maj_op == 0b000 and min_op == 0b001 and bit_13 and substring(instruction, 11, 10) == 0b11:
+            return ConditionalAsrhNotNew
     elif iclass == 0b1011:
         return Q6RAddRi
     elif iclass == 0b1111:

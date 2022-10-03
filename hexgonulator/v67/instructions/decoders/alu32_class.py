@@ -15,6 +15,10 @@ from ..concrete.conditional_asrh import ConditionalAsrh
 from ..concrete.conditional_asrh_new import ConditionalAsrhNew
 from ..concrete.conditional_asrh_not import ConditionalAsrhNot
 from ..concrete.conditional_asrh_not_new import ConditionalAsrhNotNew
+from ..concrete.conditional_combine import ConditionalCombine
+from ..concrete.conditional_combine_new import ConditionalCombineNew
+from ..concrete.conditional_combine_not import ConditionalCombineNot
+from ..concrete.conditional_combine_not_new import ConditionalCombineNotNew
 from ..concrete.nop import Nop
 from ..concrete.q6_p_combine_ii import Q6PCombineIi
 from ..concrete.q6_p_combine_ii_unsigned import Q6PCombineIiUnsigned
@@ -176,15 +180,15 @@ def decode_alu_32_class(instruction):
             return Q6RVsubhRrSat
         if maj_op == 0b110 and min_op == 0b111:
             return Q6RVsubuhRrSat
-        if maj_op == 0b011 and min_op == 0b100:
+        if not p and maj_op == 0b011 and min_op == 0b100:
             return Q6RCombineRhrh
-        if maj_op == 0b011 and min_op == 0b101:
+        if not p and maj_op == 0b011 and min_op == 0b101:
             return Q6RCombineRhrl
-        if maj_op == 0b011 and min_op == 0b110:
+        if not p and maj_op == 0b011 and min_op == 0b110:
             return Q6RCombineRlrh
-        if maj_op == 0b011 and min_op == 0b111:
+        if not p and maj_op == 0b011 and min_op == 0b111:
             return Q6RCombineRlrl
-        if maj_op == 0b101 and ((min_op >> 2) == 0b0):
+        if not p and maj_op == 0b101 and ((min_op >> 2) == 0b0):
             return Q6PCombineRr
         if maj_op == 0b100:
             return Q6RMuxPrr
@@ -198,3 +202,11 @@ def decode_alu_32_class(instruction):
             return ConditionalAddNewReg
         if p and maj_op == 0b011 and min_op == 0b000 and bit_at(instruction, 13) and bit_at(instruction, 7):
             return ConditionalAddNotNewReg
+        if p and maj_op == 0b101 and min_op == 0b000 and not bit_at(instruction, 13) and not bit_at(instruction, 7):
+            return ConditionalCombine
+        if p and maj_op == 0b101 and min_op == 0b000 and not bit_at(instruction, 13) and bit_at(instruction, 7):
+            return ConditionalCombineNot
+        if p and maj_op == 0b101 and min_op == 0b000 and bit_at(instruction, 13) and not bit_at(instruction, 7):
+            return ConditionalCombineNew
+        if p and maj_op == 0b101 and min_op == 0b000 and bit_at(instruction, 13) and bit_at(instruction, 7):
+            return ConditionalCombineNotNew

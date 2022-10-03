@@ -21,9 +21,7 @@ class ConditionalAdd(Instruction):
         yield
         if self.dot_new:
             pu = processor.registers.predicate[self.pu]
-        rd = None
         if bit_at(pu, 0) == int(self.sense):
             rd = to_unsigned(rs + addend, 32)
-        if rd is not None:
             processor.registers.general[self.d] = rd
         yield

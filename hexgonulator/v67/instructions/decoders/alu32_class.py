@@ -31,6 +31,14 @@ from ..concrete.conditional_sub import ConditionalSub
 from ..concrete.conditional_sub_new import ConditionalSubNew
 from ..concrete.conditional_sub_not import ConditionalSubNot
 from ..concrete.conditional_sub_not_new import ConditionalSubNotNew
+from ..concrete.conditional_sxtb import ConditionalSxtb
+from ..concrete.conditional_sxtb_new import ConditionalSxtbNew
+from ..concrete.conditional_sxtb_not import ConditionalSxtbNot
+from ..concrete.conditional_sxtb_not_new import ConditionalSxtbNotNew
+from ..concrete.conditional_sxth import ConditionalSxth
+from ..concrete.conditional_sxth_new import ConditionalSxthNew
+from ..concrete.conditional_sxth_not import ConditionalSxthNot
+from ..concrete.conditional_sxth_not_new import ConditionalSxthNotNew
 from ..concrete.conditional_xor import ConditionalXor
 from ..concrete.conditional_xor_new import ConditionalXorNew
 from ..concrete.conditional_xor_not import ConditionalXorNot
@@ -98,9 +106,9 @@ def decode_alu_32_class(instruction):
             return Nop
         if maj_op == 0b110 and ((min_op >> 1) == 0b01):
             return Q6RSubIr
-        if maj_op == 0b000 and min_op == 0b101:
+        if maj_op == 0b000 and min_op == 0b101 and not bit_13:
             return Q6RSxtbR
-        if maj_op == 0b000 and min_op == 0b111:
+        if maj_op == 0b000 and min_op == 0b111 and not bit_13:
             return Q6RSxthR
         if maj_op == 0b000 and rs:
             return Q6REqualsI
@@ -154,6 +162,22 @@ def decode_alu_32_class(instruction):
             return ConditionalAsrhNot
         if not rs and maj_op == 0b000 and min_op == 0b001 and bit_13 and substring(instruction, 11, 10) == 0b11:
             return ConditionalAsrhNotNew
+        if not rs and maj_op == 0b000 and min_op == 0b101 and bit_13 and substring(instruction, 11, 10) == 0b00:
+            return ConditionalSxtb
+        if not rs and maj_op == 0b000 and min_op == 0b101 and bit_13 and substring(instruction, 11, 10) == 0b01:
+            return ConditionalSxtbNew
+        if not rs and maj_op == 0b000 and min_op == 0b101 and bit_13 and substring(instruction, 11, 10) == 0b10:
+            return ConditionalSxtbNot
+        if not rs and maj_op == 0b000 and min_op == 0b101 and bit_13 and substring(instruction, 11, 10) == 0b11:
+            return ConditionalSxtbNotNew
+        if not rs and maj_op == 0b000 and min_op == 0b111 and bit_13 and substring(instruction, 11, 10) == 0b00:
+            return ConditionalSxth
+        if not rs and maj_op == 0b000 and min_op == 0b111 and bit_13 and substring(instruction, 11, 10) == 0b01:
+            return ConditionalSxthNew
+        if not rs and maj_op == 0b000 and min_op == 0b111 and bit_13 and substring(instruction, 11, 10) == 0b10:
+            return ConditionalSxthNot
+        if not rs and maj_op == 0b000 and min_op == 0b111 and bit_13 and substring(instruction, 11, 10) == 0b11:
+            return ConditionalSxthNotNew
     elif iclass == 0b1011:
         return Q6RAddRi
     elif iclass == 0b1111:

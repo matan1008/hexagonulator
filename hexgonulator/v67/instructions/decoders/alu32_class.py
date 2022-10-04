@@ -27,6 +27,10 @@ from ..concrete.conditional_or import ConditionalOr
 from ..concrete.conditional_or_new import ConditionalOrNew
 from ..concrete.conditional_or_not import ConditionalOrNot
 from ..concrete.conditional_or_not_new import ConditionalOrNotNew
+from ..concrete.conditional_sub import ConditionalSub
+from ..concrete.conditional_sub_new import ConditionalSubNew
+from ..concrete.conditional_sub_not import ConditionalSubNot
+from ..concrete.conditional_sub_not_new import ConditionalSubNotNew
 from ..concrete.conditional_xor import ConditionalXor
 from ..concrete.conditional_xor_new import ConditionalXorNew
 from ..concrete.conditional_xor_not import ConditionalXorNot
@@ -171,7 +175,7 @@ def decode_alu_32_class(instruction):
             return Q6RAndRnr
         if not p and maj_op == 0b001 and min_op == 0b101:
             return Q6ROrRnr
-        if maj_op == 0b011 and min_op == 0b001:
+        if not p and maj_op == 0b011 and min_op == 0b001:
             return Q6RSubRr
         if maj_op == 0b110 and min_op == 0b110:
             return Q6RSubRrSat
@@ -247,3 +251,11 @@ def decode_alu_32_class(instruction):
             return ConditionalXorNew
         if p and maj_op == 0b001 and ((min_op & 0b11) == 0b11) and bit_13 and bit_at(instruction, 7):
             return ConditionalXorNotNew
+        if p and maj_op == 0b011 and ((min_op & 0b101) == 0b001) and not bit_13 and not bit_at(instruction, 7):
+            return ConditionalSub
+        if p and maj_op == 0b011 and ((min_op & 0b101) == 0b001) and not bit_13 and bit_at(instruction, 7):
+            return ConditionalSubNot
+        if p and maj_op == 0b011 and ((min_op & 0b101) == 0b001) and bit_13 and not bit_at(instruction, 7):
+            return ConditionalSubNew
+        if p and maj_op == 0b011 and ((min_op & 0b101) == 0b001) and bit_13 and bit_at(instruction, 7):
+            return ConditionalSubNotNew

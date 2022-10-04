@@ -39,6 +39,10 @@ from ..concrete.conditional_sxth import ConditionalSxth
 from ..concrete.conditional_sxth_new import ConditionalSxthNew
 from ..concrete.conditional_sxth_not import ConditionalSxthNot
 from ..concrete.conditional_sxth_not_new import ConditionalSxthNotNew
+from ..concrete.conditional_transfer import ConditionalTransfer
+from ..concrete.conditional_transfer_new import ConditionalTransferNew
+from ..concrete.conditional_transfer_not import ConditionalTransferNot
+from ..concrete.conditional_transfer_not_new import ConditionalTransferNotNew
 from ..concrete.conditional_xor import ConditionalXor
 from ..concrete.conditional_xor_new import ConditionalXorNew
 from ..concrete.conditional_xor_not import ConditionalXorNot
@@ -98,9 +102,9 @@ def decode_alu_32_class(instruction):
         min_op = substring(instruction, 23, 21)
         rs = bit_at(instruction, 27)
         bit_13 = bit_at(instruction, 13)
-        if maj_op == 0b110 and ((min_op >> 1) == 0b00):
+        if not rs and maj_op == 0b110 and ((min_op >> 1) == 0b00):
             return Q6RAndRi
-        if maj_op == 0b110 and ((min_op >> 1) == 0b10):
+        if not rs and maj_op == 0b110 and ((min_op >> 1) == 0b10):
             return Q6ROrRi
         if maj_op == 0b111 and rs:
             return Nop
@@ -178,6 +182,14 @@ def decode_alu_32_class(instruction):
             return ConditionalSxthNot
         if not rs and maj_op == 0b000 and min_op == 0b111 and bit_13 and substring(instruction, 11, 10) == 0b11:
             return ConditionalSxthNotNew
+        if rs and maj_op == 0b110 and ((min_op >> 2) == 0b0) and not bit_13:
+            return ConditionalTransfer
+        if rs and maj_op == 0b110 and ((min_op >> 2) == 0b0) and bit_13:
+            return ConditionalTransferNew
+        if rs and maj_op == 0b110 and ((min_op >> 2) == 0b1) and not bit_13:
+            return ConditionalTransferNot
+        if rs and maj_op == 0b110 and ((min_op >> 2) == 0b1) and bit_13:
+            return ConditionalTransferNotNew
     elif iclass == 0b1011:
         return Q6RAddRi
     elif iclass == 0b1111:

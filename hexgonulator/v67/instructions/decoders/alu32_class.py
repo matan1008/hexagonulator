@@ -7,6 +7,10 @@ from ..concrete.conditional_add_not_new_imm import ConditionalAddNotNewImm
 from ..concrete.conditional_add_not_new_reg import ConditionalAddNotNewReg
 from ..concrete.conditional_add_not_reg import ConditionalAddNotReg
 from ..concrete.conditional_add_reg import ConditionalAddReg
+from ..concrete.conditional_and import ConditionalAnd
+from ..concrete.conditional_and_new import ConditionalAndNew
+from ..concrete.conditional_and_not import ConditionalAndNot
+from ..concrete.conditional_and_not_new import ConditionalAndNotNew
 from ..concrete.conditional_aslh import ConditionalAslh
 from ..concrete.conditional_aslh_new import ConditionalAslhNew
 from ..concrete.conditional_aslh_not import ConditionalAslhNot
@@ -19,6 +23,14 @@ from ..concrete.conditional_combine import ConditionalCombine
 from ..concrete.conditional_combine_new import ConditionalCombineNew
 from ..concrete.conditional_combine_not import ConditionalCombineNot
 from ..concrete.conditional_combine_not_new import ConditionalCombineNotNew
+from ..concrete.conditional_or import ConditionalOr
+from ..concrete.conditional_or_new import ConditionalOrNew
+from ..concrete.conditional_or_not import ConditionalOrNot
+from ..concrete.conditional_or_not_new import ConditionalOrNotNew
+from ..concrete.conditional_xor import ConditionalXor
+from ..concrete.conditional_xor_new import ConditionalXorNew
+from ..concrete.conditional_xor_not import ConditionalXorNot
+from ..concrete.conditional_xor_not_new import ConditionalXorNotNew
 from ..concrete.nop import Nop
 from ..concrete.q6_p_combine_ii import Q6PCombineIi
 from ..concrete.q6_p_combine_ii_unsigned import Q6PCombineIiUnsigned
@@ -144,19 +156,20 @@ def decode_alu_32_class(instruction):
         maj_op = substring(instruction, 26, 24)
         min_op = substring(instruction, 23, 21)
         p = bit_at(instruction, 27)
+        bit_13 = bit_at(instruction, 13)
         if not p and maj_op == 0b011 and min_op == 0b000:
             return Q6RAddRr
         if not p and maj_op == 0b110 and min_op == 0b010:
             return Q6RAddRrSat
-        if maj_op == 0b001 and min_op == 0b000:
+        if not p and maj_op == 0b001 and min_op == 0b000:
             return Q6RAndRr
-        if maj_op == 0b001 and min_op == 0b001:
+        if not p and maj_op == 0b001 and min_op == 0b001:
             return Q6ROrRr
-        if maj_op == 0b001 and min_op == 0b011:
+        if not p and maj_op == 0b001 and min_op == 0b011:
             return Q6RXorRr
-        if maj_op == 0b001 and min_op == 0b100:
+        if not p and maj_op == 0b001 and min_op == 0b100:
             return Q6RAndRnr
-        if maj_op == 0b001 and min_op == 0b101:
+        if not p and maj_op == 0b001 and min_op == 0b101:
             return Q6ROrRnr
         if maj_op == 0b011 and min_op == 0b001:
             return Q6RSubRr
@@ -194,19 +207,43 @@ def decode_alu_32_class(instruction):
             return Q6RMuxPrr
         if maj_op == 0b101 and ((min_op >> 2) == 0b1):
             return Q6PPackhlRr
-        if p and maj_op == 0b011 and min_op == 0b000 and not bit_at(instruction, 13) and not bit_at(instruction, 7):
+        if p and maj_op == 0b011 and min_op == 0b000 and not bit_13 and not bit_at(instruction, 7):
             return ConditionalAddReg
-        if p and maj_op == 0b011 and min_op == 0b000 and not bit_at(instruction, 13) and bit_at(instruction, 7):
+        if p and maj_op == 0b011 and min_op == 0b000 and not bit_13 and bit_at(instruction, 7):
             return ConditionalAddNotReg
-        if p and maj_op == 0b011 and min_op == 0b000 and bit_at(instruction, 13) and not bit_at(instruction, 7):
+        if p and maj_op == 0b011 and min_op == 0b000 and bit_13 and not bit_at(instruction, 7):
             return ConditionalAddNewReg
-        if p and maj_op == 0b011 and min_op == 0b000 and bit_at(instruction, 13) and bit_at(instruction, 7):
+        if p and maj_op == 0b011 and min_op == 0b000 and bit_13 and bit_at(instruction, 7):
             return ConditionalAddNotNewReg
-        if p and maj_op == 0b101 and min_op == 0b000 and not bit_at(instruction, 13) and not bit_at(instruction, 7):
+        if p and maj_op == 0b101 and min_op == 0b000 and not bit_13 and not bit_at(instruction, 7):
             return ConditionalCombine
-        if p and maj_op == 0b101 and min_op == 0b000 and not bit_at(instruction, 13) and bit_at(instruction, 7):
+        if p and maj_op == 0b101 and min_op == 0b000 and not bit_13 and bit_at(instruction, 7):
             return ConditionalCombineNot
-        if p and maj_op == 0b101 and min_op == 0b000 and bit_at(instruction, 13) and not bit_at(instruction, 7):
+        if p and maj_op == 0b101 and min_op == 0b000 and bit_13 and not bit_at(instruction, 7):
             return ConditionalCombineNew
-        if p and maj_op == 0b101 and min_op == 0b000 and bit_at(instruction, 13) and bit_at(instruction, 7):
+        if p and maj_op == 0b101 and min_op == 0b000 and bit_13 and bit_at(instruction, 7):
             return ConditionalCombineNotNew
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b00) and not bit_13 and not bit_at(instruction, 7):
+            return ConditionalAnd
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b00) and not bit_13 and bit_at(instruction, 7):
+            return ConditionalAndNot
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b00) and bit_13 and not bit_at(instruction, 7):
+            return ConditionalAndNew
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b00) and bit_13 and bit_at(instruction, 7):
+            return ConditionalAndNotNew
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b01) and not bit_13 and not bit_at(instruction, 7):
+            return ConditionalOr
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b01) and not bit_13 and bit_at(instruction, 7):
+            return ConditionalOrNot
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b01) and bit_13 and not bit_at(instruction, 7):
+            return ConditionalOrNew
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b01) and bit_13 and bit_at(instruction, 7):
+            return ConditionalOrNotNew
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b11) and not bit_13 and not bit_at(instruction, 7):
+            return ConditionalXor
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b11) and not bit_13 and bit_at(instruction, 7):
+            return ConditionalXorNot
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b11) and bit_13 and not bit_at(instruction, 7):
+            return ConditionalXorNew
+        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b11) and bit_13 and bit_at(instruction, 7):
+            return ConditionalXorNotNew

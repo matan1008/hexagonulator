@@ -56,11 +56,23 @@ from ..concrete.conditional_zxth_new import ConditionalZxthNew
 from ..concrete.conditional_zxth_not import ConditionalZxthNot
 from ..concrete.conditional_zxth_not_new import ConditionalZxthNotNew
 from ..concrete.nop import Nop
+from ..concrete.q6_p_cmp_eq_ri import Q6PCmpEqRi
+from ..concrete.q6_p_cmp_eq_rr import Q6PCmpEqRr
+from ..concrete.q6_p_cmp_gt_ri import Q6PCmpGtRi
+from ..concrete.q6_p_cmp_gt_rr import Q6PCmpGtRr
+from ..concrete.q6_p_cmp_gtu_ri import Q6PCmpGtuRi
+from ..concrete.q6_p_cmp_gtu_rr import Q6PCmpGtuRr
 from ..concrete.q6_p_combine_ii import Q6PCombineIi
 from ..concrete.q6_p_combine_ii_unsigned import Q6PCombineIiUnsigned
 from ..concrete.q6_p_combine_ir import Q6PCombineIr
 from ..concrete.q6_p_combine_ri import Q6PCombineRi
 from ..concrete.q6_p_combine_rr import Q6PCombineRr
+from ..concrete.q6_p_not_cmp_eq_ri import Q6PNotCmpEqRi
+from ..concrete.q6_p_not_cmp_eq_rr import Q6PNotCmpEqRr
+from ..concrete.q6_p_not_cmp_gt_ri import Q6PNotCmpGtRi
+from ..concrete.q6_p_not_cmp_gt_rr import Q6PNotCmpGtRr
+from ..concrete.q6_p_not_cmp_gtu_ri import Q6PNotCmpGtuRi
+from ..concrete.q6_p_not_cmp_gtu_rr import Q6PNotCmpGtuRr
 from ..concrete.q6_p_packhl_rr import Q6PPackhlRr
 from ..concrete.q6_r_add_ri import Q6RAddRi
 from ..concrete.q6_r_add_rr import Q6RAddRr
@@ -214,6 +226,18 @@ def decode_alu_32_class(instruction):
             return ConditionalZxthNot
         if not rs and maj_op == 0b000 and min_op == 0b110 and bit_13 and substring(instruction, 11, 10) == 0b11:
             return ConditionalZxthNotNew
+        if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b00) and substring(instruction, 4, 2) == 0b000:
+            return Q6PCmpEqRi
+        if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b00) and substring(instruction, 4, 2) == 0b100:
+            return Q6PNotCmpEqRi
+        if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b01) and substring(instruction, 4, 2) == 0b000:
+            return Q6PCmpGtRi
+        if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b01) and substring(instruction, 4, 2) == 0b100:
+            return Q6PNotCmpGtRi
+        if not rs and maj_op == 0b101 and min_op == 0b100 and substring(instruction, 4, 2) == 0b000:
+            return Q6PCmpGtuRi
+        if not rs and maj_op == 0b101 and min_op == 0b100 and substring(instruction, 4, 2) == 0b100:
+            return Q6PNotCmpGtuRi
     elif iclass == 0b1011:
         return Q6RAddRi
     elif iclass == 0b1111:
@@ -319,3 +343,15 @@ def decode_alu_32_class(instruction):
             return ConditionalSubNew
         if p and maj_op == 0b011 and ((min_op & 0b101) == 0b001) and bit_13 and bit_at(instruction, 7):
             return ConditionalSubNotNew
+        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b00) and substring(instruction, 4, 2) == 0b000:
+            return Q6PCmpEqRr
+        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b00) and substring(instruction, 4, 2) == 0b100:
+            return Q6PNotCmpEqRr
+        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b10) and substring(instruction, 4, 2) == 0b000:
+            return Q6PCmpGtRr
+        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b10) and substring(instruction, 4, 2) == 0b100:
+            return Q6PNotCmpGtRr
+        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b11) and substring(instruction, 4, 2) == 0b000:
+            return Q6PCmpGtuRr
+        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b11) and substring(instruction, 4, 2) == 0b100:
+            return Q6PNotCmpGtuRr

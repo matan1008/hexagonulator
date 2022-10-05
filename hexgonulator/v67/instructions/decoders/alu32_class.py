@@ -47,6 +47,14 @@ from ..concrete.conditional_xor import ConditionalXor
 from ..concrete.conditional_xor_new import ConditionalXorNew
 from ..concrete.conditional_xor_not import ConditionalXorNot
 from ..concrete.conditional_xor_not_new import ConditionalXorNotNew
+from ..concrete.conditional_zxtb import ConditionalZxtb
+from ..concrete.conditional_zxtb_new import ConditionalZxtbNew
+from ..concrete.conditional_zxtb_not import ConditionalZxtbNot
+from ..concrete.conditional_zxtb_not_new import ConditionalZxtbNotNew
+from ..concrete.conditional_zxth import ConditionalZxth
+from ..concrete.conditional_zxth_new import ConditionalZxthNew
+from ..concrete.conditional_zxth_not import ConditionalZxthNot
+from ..concrete.conditional_zxth_not_new import ConditionalZxthNotNew
 from ..concrete.nop import Nop
 from ..concrete.q6_p_combine_ii import Q6PCombineIi
 from ..concrete.q6_p_combine_ii_unsigned import Q6PCombineIiUnsigned
@@ -122,7 +130,7 @@ def decode_alu_32_class(instruction):
             return Q6RlEqualsI
         if not rs and maj_op == 0b000 and min_op == 0b011:
             return Q6REqualsR
-        if maj_op == 0b000 and min_op == 0b110:
+        if not rs and maj_op == 0b000 and min_op == 0b110 and not bit_13:
             return Q6RZxthR
         if rs and maj_op == 0b100 and ((min_op >> 2) == 0b0):
             return Q6PCombineIi
@@ -190,6 +198,22 @@ def decode_alu_32_class(instruction):
             return ConditionalTransferNot
         if rs and maj_op == 0b110 and ((min_op >> 2) == 0b1) and bit_13:
             return ConditionalTransferNotNew
+        if not rs and maj_op == 0b000 and min_op == 0b100 and bit_13 and substring(instruction, 11, 10) == 0b00:
+            return ConditionalZxtb
+        if not rs and maj_op == 0b000 and min_op == 0b100 and bit_13 and substring(instruction, 11, 10) == 0b01:
+            return ConditionalZxtbNew
+        if not rs and maj_op == 0b000 and min_op == 0b100 and bit_13 and substring(instruction, 11, 10) == 0b10:
+            return ConditionalZxtbNot
+        if not rs and maj_op == 0b000 and min_op == 0b100 and bit_13 and substring(instruction, 11, 10) == 0b11:
+            return ConditionalZxtbNotNew
+        if not rs and maj_op == 0b000 and min_op == 0b110 and bit_13 and substring(instruction, 11, 10) == 0b00:
+            return ConditionalZxth
+        if not rs and maj_op == 0b000 and min_op == 0b110 and bit_13 and substring(instruction, 11, 10) == 0b01:
+            return ConditionalZxthNew
+        if not rs and maj_op == 0b000 and min_op == 0b110 and bit_13 and substring(instruction, 11, 10) == 0b10:
+            return ConditionalZxthNot
+        if not rs and maj_op == 0b000 and min_op == 0b110 and bit_13 and substring(instruction, 11, 10) == 0b11:
+            return ConditionalZxthNotNew
     elif iclass == 0b1011:
         return Q6RAddRi
     elif iclass == 0b1111:

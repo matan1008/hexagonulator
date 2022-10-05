@@ -82,6 +82,8 @@ from ..concrete.q6_r_and_rnr import Q6RAndRnr
 from ..concrete.q6_r_and_rr import Q6RAndRr
 from ..concrete.q6_r_aslh_r import Q6RAslhR
 from ..concrete.q6_r_asrh_r import Q6RAsrhR
+from ..concrete.q6_r_cmp_eq_ri import Q6RCmpEqRi
+from ..concrete.q6_r_cmp_eq_rr import Q6RCmpEqRr
 from ..concrete.q6_r_combine_rhrh import Q6RCombineRhrh
 from ..concrete.q6_r_combine_rhrl import Q6RCombineRhrl
 from ..concrete.q6_r_combine_rlrh import Q6RCombineRlrh
@@ -92,6 +94,8 @@ from ..concrete.q6_r_mux_pii import Q6RMuxPii
 from ..concrete.q6_r_mux_pir import Q6RMuxPir
 from ..concrete.q6_r_mux_pri import Q6RMuxPri
 from ..concrete.q6_r_mux_prr import Q6RMuxPrr
+from ..concrete.q6_r_not_cmp_eq_ri import Q6RNotCmpEqRi
+from ..concrete.q6_r_not_cmp_eq_rr import Q6RNotCmpEqRr
 from ..concrete.q6_r_or_ri import Q6ROrRi
 from ..concrete.q6_r_or_rnr import Q6ROrRnr
 from ..concrete.q6_r_or_rr import Q6ROrRr
@@ -238,6 +242,10 @@ def decode_alu_32_class(instruction):
             return Q6PCmpGtuRi
         if not rs and maj_op == 0b101 and min_op == 0b100 and substring(instruction, 4, 2) == 0b100:
             return Q6PNotCmpGtuRi
+        if not rs and maj_op == 0b011 and ((min_op & 0b11) == 0b10) and bit_13:
+            return Q6RCmpEqRi
+        if not rs and maj_op == 0b011 and ((min_op & 0b11) == 0b11) and bit_13:
+            return Q6RNotCmpEqRi
     elif iclass == 0b1011:
         return Q6RAddRi
     elif iclass == 0b1111:
@@ -355,3 +363,7 @@ def decode_alu_32_class(instruction):
             return Q6PCmpGtuRr
         if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b11) and substring(instruction, 4, 2) == 0b100:
             return Q6PNotCmpGtuRr
+        if not p and maj_op == 0b011 and min_op == 0b010:
+            return Q6RCmpEqRr
+        if not p and maj_op == 0b011 and min_op == 0b011:
+            return Q6RNotCmpEqRr

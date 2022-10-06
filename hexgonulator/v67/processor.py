@@ -14,9 +14,14 @@ class HexagonV67:
         self.xunits = Xunits(self)
         self.memory = MemoryControllerHub()
         self.packet = []
+        self.pc_changed = False
 
     def mem_get(self, address, length):
         return self.memory[address, length]
+
+    def instr_set_pc(self, value):
+        self.registers.pc = value
+        self.pc_changed = True
 
     def cycle(self):
         self.packet = []
@@ -28,7 +33,45 @@ class HexagonV67:
                 break
         self.xunits.set_instructions(self.sequencer.sequence(self.packet))
         self.xunits.cycle()
-        self.registers.pc += 4 * len(self.packet)
+        self.test_loop()
+        if self.pc_changed:
+            self.pc_changed = False
+        else:
+            self.registers.pc += 4 * len(self.packet)
+
+    def test_loop(self):
+        if self.packet[0].parse_field == 0b10 and self.packet[1].parse_field == 0b10:
+            self.endloop01()
+        elif self.packet[0].parse_field == 0b10:
+            self.endloop0()
+        elif self.packet[1].parse_field == 0b10:
+            self.endloop1()
+
+    def endloop0(self):
+        if self.registers.usr.lpcfg:
+            if self.registers.usr.lpcfg == 0b01:
+                self.registers.predicate[3] = 0xff
+            self.registers.usr.lpcfg -= 1
+        if self.registers.lc0 > 1:
+            self.instr_set_pc(self.registers.sa0)
+            self.registers.lc0 -= 1
+
+    def endloop01(self):
+        if self.registers.usr.lpcfg:
+            if self.registers.usr.lpcfg == 0b01:
+                self.registers.predicate[3] = 0xff
+            self.registers.usr.lpcfg -= 1
+        if self.registers.lc0 > 1:
+            self.instr_set_pc(self.registers.sa0)
+            self.registers.lc0 -= 1
+        elif self.registers.lc1 > 1:
+            self.instr_set_pc(self.registers.sa1)
+            self.registers.lc1 -= 1
+
+    def endloop1(self):
+        if self.registers.lc1 > 1:
+            self.instr_set_pc(self.registers.sa1)
+            self.registers.lc1 -= 1
 
     def apply_extension(self, bits: int, length: int, signed=False):
         if self.packet and isinstance(self.packet[-1], ConstantExtender):

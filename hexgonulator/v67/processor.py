@@ -44,7 +44,7 @@ class HexagonV67:
             self.endloop01()
         elif self.packet[0].parse_field == 0b10:
             self.endloop0()
-        elif self.packet[1].parse_field == 0b10:
+        elif len(self.packet) > 1 and self.packet[1].parse_field == 0b10:
             self.endloop1()
 
     def endloop0(self):

@@ -118,252 +118,274 @@ from ..concrete.q6_r_zxth_r import Q6RZxthR
 from ..concrete.q6_rh_equals_i import Q6RhEqualsI
 from ..concrete.q6_rl_equals_i import Q6RlEqualsI
 
+CONDITIONAL_ASLH_S_DN = {
+    0b00: ConditionalAslh,
+    0b01: ConditionalAslhNew,
+    0b10: ConditionalAslhNot,
+    0b11: ConditionalAslhNotNew,
+}
+
+CONDITIONAL_ASRH_S_DN = {
+    0b00: ConditionalAsrh,
+    0b01: ConditionalAsrhNew,
+    0b10: ConditionalAsrhNot,
+    0b11: ConditionalAsrhNotNew,
+}
+
+CONDITIONAL_SXTB_S_DN = {
+    0b00: ConditionalSxtb,
+    0b01: ConditionalSxtbNew,
+    0b10: ConditionalSxtbNot,
+    0b11: ConditionalSxtbNotNew,
+}
+
+CONDITIONAL_SXTH_S_DN = {
+    0b00: ConditionalSxth,
+    0b01: ConditionalSxthNew,
+    0b10: ConditionalSxthNot,
+    0b11: ConditionalSxthNotNew,
+}
+
+CONDITIONAL_ZXTB_S_DN = {
+    0b00: ConditionalZxtb,
+    0b01: ConditionalZxtbNew,
+    0b10: ConditionalZxtbNot,
+    0b11: ConditionalZxtbNotNew,
+}
+
+CONDITIONAL_ZXTH_S_DN = {
+    0b00: ConditionalZxth,
+    0b01: ConditionalZxthNew,
+    0b10: ConditionalZxthNot,
+    0b11: ConditionalZxthNotNew,
+}
+
+CONDITIONAL_TRANSFER_S_DN = {
+    (0b0, 0b0): ConditionalTransfer,
+    (0b0, 0b1): ConditionalTransferNew,
+    (0b1, 0b0): ConditionalTransferNot,
+    (0b1, 0b1): ConditionalTransferNotNew,
+}
+
+CONDITIONAL_ADD_IMM_S_DN = {
+    (0b0, 0b0): ConditionalAddImm,
+    (0b0, 0b1): ConditionalAddNewImm,
+    (0b1, 0b0): ConditionalAddNotImm,
+    (0b1, 0b1): ConditionalAddNotNewImm,
+}
+
+CONDITIONAL_ADD_REG_DN_S = {
+    (0b0, 0b0): ConditionalAddReg,
+    (0b0, 0b1): ConditionalAddNotReg,
+    (0b1, 0b0): ConditionalAddNewReg,
+    (0b1, 0b1): ConditionalAddNotNewReg,
+}
+
+CONDITIONAL_COMBINE_DN_S = {
+    (0b0, 0b0): ConditionalCombine,
+    (0b0, 0b1): ConditionalCombineNot,
+    (0b1, 0b0): ConditionalCombineNew,
+    (0b1, 0b1): ConditionalCombineNotNew,
+}
+
+CONDITIONAL_AND_DN_S = {
+    (0b0, 0b0): ConditionalAnd,
+    (0b0, 0b1): ConditionalAndNot,
+    (0b1, 0b0): ConditionalAndNew,
+    (0b1, 0b1): ConditionalAndNotNew,
+}
+
+CONDITIONAL_OR_DN_S = {
+    (0b0, 0b0): ConditionalOr,
+    (0b0, 0b1): ConditionalOrNot,
+    (0b1, 0b0): ConditionalOrNew,
+    (0b1, 0b1): ConditionalOrNotNew,
+}
+
+CONDITIONAL_XOR_DN_S = {
+    (0b0, 0b0): ConditionalXor,
+    (0b0, 0b1): ConditionalXorNot,
+    (0b1, 0b0): ConditionalXorNew,
+    (0b1, 0b1): ConditionalXorNotNew,
+}
+
+CONDITIONAL_SUB_DN_S = {
+    (0b0, 0b0): ConditionalSub,
+    (0b0, 0b1): ConditionalSubNot,
+    (0b1, 0b0): ConditionalSubNew,
+    (0b1, 0b1): ConditionalSubNotNew,
+}
+
+
+def decode_alu_32_class_7(instruction):
+    maj_op = substring(instruction, 26, 24)
+    min_op = substring(instruction, 23, 21)
+    rs = bit_at(instruction, 27)
+    bit_13 = bit_at(instruction, 13)
+    if not rs and maj_op == 0b110 and ((min_op >> 1) == 0b00):
+        return Q6RAndRi
+    if not rs and maj_op == 0b110 and ((min_op >> 1) == 0b10):
+        return Q6ROrRi
+    if maj_op == 0b111 and rs:
+        return Nop
+    if maj_op == 0b110 and ((min_op >> 1) == 0b01):
+        return Q6RSubIr
+    if maj_op == 0b000 and min_op == 0b101 and not bit_13:
+        return Q6RSxtbR
+    if maj_op == 0b000 and min_op == 0b111 and not bit_13:
+        return Q6RSxthR
+    if maj_op == 0b000 and rs:
+        return Q6REqualsI
+    if not rs and maj_op == 0b010 and min_op & 1 == 1:
+        return Q6RhEqualsI
+    if not rs and maj_op == 0b001 and min_op & 1 == 1:
+        return Q6RlEqualsI
+    if not rs and maj_op == 0b000 and min_op == 0b011:
+        return Q6REqualsR
+    if not rs and maj_op == 0b000 and min_op == 0b110 and not bit_13:
+        return Q6RZxthR
+    if rs and maj_op == 0b100 and ((min_op >> 2) == 0b0):
+        return Q6PCombineIi
+    if rs and maj_op == 0b100 and ((min_op >> 2) == 0b1):
+        return Q6PCombineIiUnsigned
+    if not rs and maj_op == 0b011 and ((min_op & 3) == 0b01) and bit_13:
+        return Q6PCombineIr
+    if not rs and maj_op == 0b011 and ((min_op & 3) == 0b00) and bit_13:
+        return Q6PCombineRi
+    if rs and (maj_op >> 1) == 0b01:
+        return Q6RMuxPii
+    if not rs and maj_op == 0b011 and bit_at(instruction, 23) and not bit_13:
+        return Q6RMuxPir
+    if not rs and maj_op == 0b011 and not bit_at(instruction, 23) and not bit_13:
+        return Q6RMuxPri
+    if not rs and maj_op == 0b000 and min_op == 0b000 and not bit_13:
+        return Q6RAslhR
+    if not rs and maj_op == 0b000 and min_op == 0b001 and not bit_13:
+        return Q6RAsrhR
+    if not rs and maj_op == 0b100:
+        return CONDITIONAL_ADD_IMM_S_DN[(min_op >> 2), bit_13]
+    if not rs and maj_op == 0b000 and min_op == 0b000 and bit_13:
+        return CONDITIONAL_ASLH_S_DN[substring(instruction, 11, 10)]
+    if not rs and maj_op == 0b000 and min_op == 0b001 and bit_13:
+        return CONDITIONAL_ASRH_S_DN[substring(instruction, 11, 10)]
+    if not rs and maj_op == 0b000 and min_op == 0b101 and bit_13:
+        return CONDITIONAL_SXTB_S_DN[substring(instruction, 11, 10)]
+    if not rs and maj_op == 0b000 and min_op == 0b111 and bit_13:
+        return CONDITIONAL_SXTH_S_DN[substring(instruction, 11, 10)]
+    if rs and maj_op == 0b110:
+        return CONDITIONAL_TRANSFER_S_DN[(min_op >> 2), bit_13]
+    if not rs and maj_op == 0b000 and min_op == 0b100 and bit_13:
+        return CONDITIONAL_ZXTB_S_DN[substring(instruction, 11, 10)]
+    if not rs and maj_op == 0b000 and min_op == 0b110 and bit_13:
+        return CONDITIONAL_ZXTH_S_DN[substring(instruction, 11, 10)]
+    if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b00) and substring(instruction, 4, 2) == 0b000:
+        return Q6PCmpEqRi
+    if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b00) and substring(instruction, 4, 2) == 0b100:
+        return Q6PNotCmpEqRi
+    if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b01) and substring(instruction, 4, 2) == 0b000:
+        return Q6PCmpGtRi
+    if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b01) and substring(instruction, 4, 2) == 0b100:
+        return Q6PNotCmpGtRi
+    if not rs and maj_op == 0b101 and min_op == 0b100 and substring(instruction, 4, 2) == 0b000:
+        return Q6PCmpGtuRi
+    if not rs and maj_op == 0b101 and min_op == 0b100 and substring(instruction, 4, 2) == 0b100:
+        return Q6PNotCmpGtuRi
+    if not rs and maj_op == 0b011 and ((min_op & 0b11) == 0b10) and bit_13:
+        return Q6RCmpEqRi
+    if not rs and maj_op == 0b011 and ((min_op & 0b11) == 0b11) and bit_13:
+        return Q6RNotCmpEqRi
+
+
+def decode_alu_32_class_15(instruction):
+    maj_op = substring(instruction, 26, 24)
+    min_op = substring(instruction, 23, 21)
+    p = bit_at(instruction, 27)
+    bit_13 = bit_at(instruction, 13)
+    if not p and maj_op == 0b011 and min_op == 0b000:
+        return Q6RAddRr
+    if not p and maj_op == 0b110 and min_op == 0b010:
+        return Q6RAddRrSat
+    if not p and maj_op == 0b001 and min_op == 0b000:
+        return Q6RAndRr
+    if not p and maj_op == 0b001 and min_op == 0b001:
+        return Q6ROrRr
+    if not p and maj_op == 0b001 and min_op == 0b011:
+        return Q6RXorRr
+    if not p and maj_op == 0b001 and min_op == 0b100:
+        return Q6RAndRnr
+    if not p and maj_op == 0b001 and min_op == 0b101:
+        return Q6ROrRnr
+    if not p and maj_op == 0b011 and min_op == 0b001:
+        return Q6RSubRr
+    if maj_op == 0b110 and min_op == 0b110:
+        return Q6RSubRrSat
+    if maj_op == 0b110 and min_op == 0b000:
+        return Q6RVaddhRr
+    if maj_op == 0b110 and min_op == 0b001:
+        return Q6RVaddhRrSat
+    if maj_op == 0b110 and min_op == 0b011:
+        return Q6RVadduhRrSat
+    if maj_op == 0b111 and min_op == 0b000:
+        return Q6RVavghRr
+    if maj_op == 0b111 and min_op == 0b001:
+        return Q6RVavghRrRnd
+    if maj_op == 0b111 and min_op == 0b011:
+        return Q6RVnavghRrRnd
+    if maj_op == 0b110 and min_op == 0b100:
+        return Q6RVsubhRr
+    if maj_op == 0b110 and min_op == 0b101:
+        return Q6RVsubhRrSat
+    if maj_op == 0b110 and min_op == 0b111:
+        return Q6RVsubuhRrSat
+    if not p and maj_op == 0b011 and min_op == 0b100:
+        return Q6RCombineRhrh
+    if not p and maj_op == 0b011 and min_op == 0b101:
+        return Q6RCombineRhrl
+    if not p and maj_op == 0b011 and min_op == 0b110:
+        return Q6RCombineRlrh
+    if not p and maj_op == 0b011 and min_op == 0b111:
+        return Q6RCombineRlrl
+    if not p and maj_op == 0b101 and ((min_op >> 2) == 0b0):
+        return Q6PCombineRr
+    if maj_op == 0b100:
+        return Q6RMuxPrr
+    if maj_op == 0b101 and ((min_op >> 2) == 0b1):
+        return Q6PPackhlRr
+    if p and maj_op == 0b011 and min_op == 0b000:
+        return CONDITIONAL_ADD_REG_DN_S[bit_13, bit_at(instruction, 7)]
+    if p and maj_op == 0b101 and min_op == 0b000:
+        return CONDITIONAL_COMBINE_DN_S[bit_13, bit_at(instruction, 7)]
+    if p and maj_op == 0b001 and ((min_op & 0b11) == 0b00):
+        return CONDITIONAL_AND_DN_S[bit_13, bit_at(instruction, 7)]
+    if p and maj_op == 0b001 and ((min_op & 0b11) == 0b01):
+        return CONDITIONAL_OR_DN_S[bit_13, bit_at(instruction, 7)]
+    if p and maj_op == 0b001 and ((min_op & 0b11) == 0b11):
+        return CONDITIONAL_XOR_DN_S[bit_13, bit_at(instruction, 7)]
+    if p and maj_op == 0b011 and ((min_op & 0b101) == 0b001):
+        return CONDITIONAL_SUB_DN_S[bit_13, bit_at(instruction, 7)]
+    if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b00) and substring(instruction, 4, 2) == 0b000:
+        return Q6PCmpEqRr
+    if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b00) and substring(instruction, 4, 2) == 0b100:
+        return Q6PNotCmpEqRr
+    if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b10) and substring(instruction, 4, 2) == 0b000:
+        return Q6PCmpGtRr
+    if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b10) and substring(instruction, 4, 2) == 0b100:
+        return Q6PNotCmpGtRr
+    if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b11) and substring(instruction, 4, 2) == 0b000:
+        return Q6PCmpGtuRr
+    if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b11) and substring(instruction, 4, 2) == 0b100:
+        return Q6PNotCmpGtuRr
+    if not p and maj_op == 0b011 and min_op == 0b010:
+        return Q6RCmpEqRr
+    if not p and maj_op == 0b011 and min_op == 0b011:
+        return Q6RNotCmpEqRr
+
 
 def decode_alu_32_class(instruction):
     iclass = substring(instruction, 31, 28)
     if iclass == 0b0111:
-        maj_op = substring(instruction, 26, 24)
-        min_op = substring(instruction, 23, 21)
-        rs = bit_at(instruction, 27)
-        bit_13 = bit_at(instruction, 13)
-        if not rs and maj_op == 0b110 and ((min_op >> 1) == 0b00):
-            return Q6RAndRi
-        if not rs and maj_op == 0b110 and ((min_op >> 1) == 0b10):
-            return Q6ROrRi
-        if maj_op == 0b111 and rs:
-            return Nop
-        if maj_op == 0b110 and ((min_op >> 1) == 0b01):
-            return Q6RSubIr
-        if maj_op == 0b000 and min_op == 0b101 and not bit_13:
-            return Q6RSxtbR
-        if maj_op == 0b000 and min_op == 0b111 and not bit_13:
-            return Q6RSxthR
-        if maj_op == 0b000 and rs:
-            return Q6REqualsI
-        if not rs and maj_op == 0b010 and min_op & 1 == 1:
-            return Q6RhEqualsI
-        if not rs and maj_op == 0b001 and min_op & 1 == 1:
-            return Q6RlEqualsI
-        if not rs and maj_op == 0b000 and min_op == 0b011:
-            return Q6REqualsR
-        if not rs and maj_op == 0b000 and min_op == 0b110 and not bit_13:
-            return Q6RZxthR
-        if rs and maj_op == 0b100 and ((min_op >> 2) == 0b0):
-            return Q6PCombineIi
-        if rs and maj_op == 0b100 and ((min_op >> 2) == 0b1):
-            return Q6PCombineIiUnsigned
-        if not rs and maj_op == 0b011 and ((min_op & 3) == 0b01) and bit_13:
-            return Q6PCombineIr
-        if not rs and maj_op == 0b011 and ((min_op & 3) == 0b00) and bit_13:
-            return Q6PCombineRi
-        if rs and (maj_op >> 1) == 0b01:
-            return Q6RMuxPii
-        if not rs and maj_op == 0b011 and bit_at(instruction, 23) and not bit_13:
-            return Q6RMuxPir
-        if not rs and maj_op == 0b011 and not bit_at(instruction, 23) and not bit_13:
-            return Q6RMuxPri
-        if not rs and maj_op == 0b000 and min_op == 0b000 and not bit_13:
-            return Q6RAslhR
-        if not rs and maj_op == 0b000 and min_op == 0b001 and not bit_13:
-            return Q6RAsrhR
-        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b0) and not bit_13:
-            return ConditionalAddImm
-        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b0) and bit_13:
-            return ConditionalAddNewImm
-        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b1) and not bit_13:
-            return ConditionalAddNotImm
-        if not rs and maj_op == 0b100 and ((min_op >> 2) == 0b1) and bit_13:
-            return ConditionalAddNotNewImm
-        if not rs and maj_op == 0b000 and min_op == 0b000 and bit_13 and substring(instruction, 11, 10) == 0b00:
-            return ConditionalAslh
-        if not rs and maj_op == 0b000 and min_op == 0b000 and bit_13 and substring(instruction, 11, 10) == 0b01:
-            return ConditionalAslhNew
-        if not rs and maj_op == 0b000 and min_op == 0b000 and bit_13 and substring(instruction, 11, 10) == 0b10:
-            return ConditionalAslhNot
-        if not rs and maj_op == 0b000 and min_op == 0b000 and bit_13 and substring(instruction, 11, 10) == 0b11:
-            return ConditionalAslhNotNew
-        if not rs and maj_op == 0b000 and min_op == 0b001 and bit_13 and substring(instruction, 11, 10) == 0b00:
-            return ConditionalAsrh
-        if not rs and maj_op == 0b000 and min_op == 0b001 and bit_13 and substring(instruction, 11, 10) == 0b01:
-            return ConditionalAsrhNew
-        if not rs and maj_op == 0b000 and min_op == 0b001 and bit_13 and substring(instruction, 11, 10) == 0b10:
-            return ConditionalAsrhNot
-        if not rs and maj_op == 0b000 and min_op == 0b001 and bit_13 and substring(instruction, 11, 10) == 0b11:
-            return ConditionalAsrhNotNew
-        if not rs and maj_op == 0b000 and min_op == 0b101 and bit_13 and substring(instruction, 11, 10) == 0b00:
-            return ConditionalSxtb
-        if not rs and maj_op == 0b000 and min_op == 0b101 and bit_13 and substring(instruction, 11, 10) == 0b01:
-            return ConditionalSxtbNew
-        if not rs and maj_op == 0b000 and min_op == 0b101 and bit_13 and substring(instruction, 11, 10) == 0b10:
-            return ConditionalSxtbNot
-        if not rs and maj_op == 0b000 and min_op == 0b101 and bit_13 and substring(instruction, 11, 10) == 0b11:
-            return ConditionalSxtbNotNew
-        if not rs and maj_op == 0b000 and min_op == 0b111 and bit_13 and substring(instruction, 11, 10) == 0b00:
-            return ConditionalSxth
-        if not rs and maj_op == 0b000 and min_op == 0b111 and bit_13 and substring(instruction, 11, 10) == 0b01:
-            return ConditionalSxthNew
-        if not rs and maj_op == 0b000 and min_op == 0b111 and bit_13 and substring(instruction, 11, 10) == 0b10:
-            return ConditionalSxthNot
-        if not rs and maj_op == 0b000 and min_op == 0b111 and bit_13 and substring(instruction, 11, 10) == 0b11:
-            return ConditionalSxthNotNew
-        if rs and maj_op == 0b110 and ((min_op >> 2) == 0b0) and not bit_13:
-            return ConditionalTransfer
-        if rs and maj_op == 0b110 and ((min_op >> 2) == 0b0) and bit_13:
-            return ConditionalTransferNew
-        if rs and maj_op == 0b110 and ((min_op >> 2) == 0b1) and not bit_13:
-            return ConditionalTransferNot
-        if rs and maj_op == 0b110 and ((min_op >> 2) == 0b1) and bit_13:
-            return ConditionalTransferNotNew
-        if not rs and maj_op == 0b000 and min_op == 0b100 and bit_13 and substring(instruction, 11, 10) == 0b00:
-            return ConditionalZxtb
-        if not rs and maj_op == 0b000 and min_op == 0b100 and bit_13 and substring(instruction, 11, 10) == 0b01:
-            return ConditionalZxtbNew
-        if not rs and maj_op == 0b000 and min_op == 0b100 and bit_13 and substring(instruction, 11, 10) == 0b10:
-            return ConditionalZxtbNot
-        if not rs and maj_op == 0b000 and min_op == 0b100 and bit_13 and substring(instruction, 11, 10) == 0b11:
-            return ConditionalZxtbNotNew
-        if not rs and maj_op == 0b000 and min_op == 0b110 and bit_13 and substring(instruction, 11, 10) == 0b00:
-            return ConditionalZxth
-        if not rs and maj_op == 0b000 and min_op == 0b110 and bit_13 and substring(instruction, 11, 10) == 0b01:
-            return ConditionalZxthNew
-        if not rs and maj_op == 0b000 and min_op == 0b110 and bit_13 and substring(instruction, 11, 10) == 0b10:
-            return ConditionalZxthNot
-        if not rs and maj_op == 0b000 and min_op == 0b110 and bit_13 and substring(instruction, 11, 10) == 0b11:
-            return ConditionalZxthNotNew
-        if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b00) and substring(instruction, 4, 2) == 0b000:
-            return Q6PCmpEqRi
-        if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b00) and substring(instruction, 4, 2) == 0b100:
-            return Q6PNotCmpEqRi
-        if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b01) and substring(instruction, 4, 2) == 0b000:
-            return Q6PCmpGtRi
-        if not rs and maj_op == 0b101 and ((min_op >> 1) == 0b01) and substring(instruction, 4, 2) == 0b100:
-            return Q6PNotCmpGtRi
-        if not rs and maj_op == 0b101 and min_op == 0b100 and substring(instruction, 4, 2) == 0b000:
-            return Q6PCmpGtuRi
-        if not rs and maj_op == 0b101 and min_op == 0b100 and substring(instruction, 4, 2) == 0b100:
-            return Q6PNotCmpGtuRi
-        if not rs and maj_op == 0b011 and ((min_op & 0b11) == 0b10) and bit_13:
-            return Q6RCmpEqRi
-        if not rs and maj_op == 0b011 and ((min_op & 0b11) == 0b11) and bit_13:
-            return Q6RNotCmpEqRi
+        return decode_alu_32_class_7(instruction)
     elif iclass == 0b1011:
         return Q6RAddRi
     elif iclass == 0b1111:
-        maj_op = substring(instruction, 26, 24)
-        min_op = substring(instruction, 23, 21)
-        p = bit_at(instruction, 27)
-        bit_13 = bit_at(instruction, 13)
-        if not p and maj_op == 0b011 and min_op == 0b000:
-            return Q6RAddRr
-        if not p and maj_op == 0b110 and min_op == 0b010:
-            return Q6RAddRrSat
-        if not p and maj_op == 0b001 and min_op == 0b000:
-            return Q6RAndRr
-        if not p and maj_op == 0b001 and min_op == 0b001:
-            return Q6ROrRr
-        if not p and maj_op == 0b001 and min_op == 0b011:
-            return Q6RXorRr
-        if not p and maj_op == 0b001 and min_op == 0b100:
-            return Q6RAndRnr
-        if not p and maj_op == 0b001 and min_op == 0b101:
-            return Q6ROrRnr
-        if not p and maj_op == 0b011 and min_op == 0b001:
-            return Q6RSubRr
-        if maj_op == 0b110 and min_op == 0b110:
-            return Q6RSubRrSat
-        if maj_op == 0b110 and min_op == 0b000:
-            return Q6RVaddhRr
-        if maj_op == 0b110 and min_op == 0b001:
-            return Q6RVaddhRrSat
-        if maj_op == 0b110 and min_op == 0b011:
-            return Q6RVadduhRrSat
-        if maj_op == 0b111 and min_op == 0b000:
-            return Q6RVavghRr
-        if maj_op == 0b111 and min_op == 0b001:
-            return Q6RVavghRrRnd
-        if maj_op == 0b111 and min_op == 0b011:
-            return Q6RVnavghRrRnd
-        if maj_op == 0b110 and min_op == 0b100:
-            return Q6RVsubhRr
-        if maj_op == 0b110 and min_op == 0b101:
-            return Q6RVsubhRrSat
-        if maj_op == 0b110 and min_op == 0b111:
-            return Q6RVsubuhRrSat
-        if not p and maj_op == 0b011 and min_op == 0b100:
-            return Q6RCombineRhrh
-        if not p and maj_op == 0b011 and min_op == 0b101:
-            return Q6RCombineRhrl
-        if not p and maj_op == 0b011 and min_op == 0b110:
-            return Q6RCombineRlrh
-        if not p and maj_op == 0b011 and min_op == 0b111:
-            return Q6RCombineRlrl
-        if not p and maj_op == 0b101 and ((min_op >> 2) == 0b0):
-            return Q6PCombineRr
-        if maj_op == 0b100:
-            return Q6RMuxPrr
-        if maj_op == 0b101 and ((min_op >> 2) == 0b1):
-            return Q6PPackhlRr
-        if p and maj_op == 0b011 and min_op == 0b000 and not bit_13 and not bit_at(instruction, 7):
-            return ConditionalAddReg
-        if p and maj_op == 0b011 and min_op == 0b000 and not bit_13 and bit_at(instruction, 7):
-            return ConditionalAddNotReg
-        if p and maj_op == 0b011 and min_op == 0b000 and bit_13 and not bit_at(instruction, 7):
-            return ConditionalAddNewReg
-        if p and maj_op == 0b011 and min_op == 0b000 and bit_13 and bit_at(instruction, 7):
-            return ConditionalAddNotNewReg
-        if p and maj_op == 0b101 and min_op == 0b000 and not bit_13 and not bit_at(instruction, 7):
-            return ConditionalCombine
-        if p and maj_op == 0b101 and min_op == 0b000 and not bit_13 and bit_at(instruction, 7):
-            return ConditionalCombineNot
-        if p and maj_op == 0b101 and min_op == 0b000 and bit_13 and not bit_at(instruction, 7):
-            return ConditionalCombineNew
-        if p and maj_op == 0b101 and min_op == 0b000 and bit_13 and bit_at(instruction, 7):
-            return ConditionalCombineNotNew
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b00) and not bit_13 and not bit_at(instruction, 7):
-            return ConditionalAnd
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b00) and not bit_13 and bit_at(instruction, 7):
-            return ConditionalAndNot
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b00) and bit_13 and not bit_at(instruction, 7):
-            return ConditionalAndNew
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b00) and bit_13 and bit_at(instruction, 7):
-            return ConditionalAndNotNew
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b01) and not bit_13 and not bit_at(instruction, 7):
-            return ConditionalOr
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b01) and not bit_13 and bit_at(instruction, 7):
-            return ConditionalOrNot
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b01) and bit_13 and not bit_at(instruction, 7):
-            return ConditionalOrNew
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b01) and bit_13 and bit_at(instruction, 7):
-            return ConditionalOrNotNew
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b11) and not bit_13 and not bit_at(instruction, 7):
-            return ConditionalXor
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b11) and not bit_13 and bit_at(instruction, 7):
-            return ConditionalXorNot
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b11) and bit_13 and not bit_at(instruction, 7):
-            return ConditionalXorNew
-        if p and maj_op == 0b001 and ((min_op & 0b11) == 0b11) and bit_13 and bit_at(instruction, 7):
-            return ConditionalXorNotNew
-        if p and maj_op == 0b011 and ((min_op & 0b101) == 0b001) and not bit_13 and not bit_at(instruction, 7):
-            return ConditionalSub
-        if p and maj_op == 0b011 and ((min_op & 0b101) == 0b001) and not bit_13 and bit_at(instruction, 7):
-            return ConditionalSubNot
-        if p and maj_op == 0b011 and ((min_op & 0b101) == 0b001) and bit_13 and not bit_at(instruction, 7):
-            return ConditionalSubNew
-        if p and maj_op == 0b011 and ((min_op & 0b101) == 0b001) and bit_13 and bit_at(instruction, 7):
-            return ConditionalSubNotNew
-        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b00) and substring(instruction, 4, 2) == 0b000:
-            return Q6PCmpEqRr
-        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b00) and substring(instruction, 4, 2) == 0b100:
-            return Q6PNotCmpEqRr
-        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b10) and substring(instruction, 4, 2) == 0b000:
-            return Q6PCmpGtRr
-        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b10) and substring(instruction, 4, 2) == 0b100:
-            return Q6PNotCmpGtRr
-        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b11) and substring(instruction, 4, 2) == 0b000:
-            return Q6PCmpGtuRr
-        if not p and maj_op == 0b010 and ((min_op & 0b11) == 0b11) and substring(instruction, 4, 2) == 0b100:
-            return Q6PNotCmpGtuRr
-        if not p and maj_op == 0b011 and min_op == 0b010:
-            return Q6RCmpEqRr
-        if not p and maj_op == 0b011 and min_op == 0b011:
-            return Q6RNotCmpEqRr
+        return decode_alu_32_class_15(instruction)

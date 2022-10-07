@@ -1,6 +1,14 @@
 from .instructions.abstract.all8 import All8
 from .instructions.abstract.any8 import Any8
 from .instructions.abstract.fastcorner9 import Fastcorner9
+from .instructions.abstract.predicate_and import PredicateAnd
+from .instructions.abstract.predicate_and_and import PredicateAndAnd
+from .instructions.abstract.predicate_and_or import PredicateAndOr
+from .instructions.abstract.predicate_not import PredicateNot
+from .instructions.abstract.predicate_or import PredicateOr
+from .instructions.abstract.predicate_or_and import PredicateOrAnd
+from .instructions.abstract.predicate_or_or import PredicateOrOr
+from .instructions.abstract.predicate_xor import PredicateXor
 
 SLOT3_ICLASSES = (0b0001, 0b0010, 0b0101, 0b0110, 0b0111, 0b0101, 0b1000, 0b1011, 0b1100, 0b1101, 0b1110, 0b1111)
 SLOT2_ICLASSES = (0b0001, 0b0010, 0b0101, 0b0111, 0b0101, 0b1000, 0b1011, 0b1100, 0b1101, 0b1110, 0b1111)
@@ -9,7 +17,10 @@ SLOT0_ICLASSES = (0b0011, 0b0100, 0b0111, 0b1001, 0b1010, 0b1011, 0b1111)
 
 SLOTS_ICLASSES = (SLOT0_ICLASSES, SLOT1_ICLASSES, SLOT2_ICLASSES, SLOT3_ICLASSES)
 
-SLOT2_EXCEPTIONS = (Fastcorner9, All8, Any8)
+SLOT2_EXCEPTIONS = (
+    Fastcorner9, All8, Any8, PredicateAnd, PredicateAndAnd, PredicateAndOr, PredicateNot, PredicateOr, PredicateOrAnd,
+    PredicateOrOr, PredicateXor
+)
 SLOTS_EXCEPTIONS = ((), (), SLOT2_EXCEPTIONS, ())
 
 

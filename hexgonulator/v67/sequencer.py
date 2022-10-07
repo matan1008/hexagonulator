@@ -1,3 +1,5 @@
+from .instructions.abstract.all8 import All8
+from .instructions.abstract.any8 import Any8
 from .instructions.abstract.fastcorner9 import Fastcorner9
 
 SLOT3_ICLASSES = (0b0001, 0b0010, 0b0101, 0b0110, 0b0111, 0b0101, 0b1000, 0b1011, 0b1100, 0b1101, 0b1110, 0b1111)
@@ -7,7 +9,7 @@ SLOT0_ICLASSES = (0b0011, 0b0100, 0b0111, 0b1001, 0b1010, 0b1011, 0b1111)
 
 SLOTS_ICLASSES = (SLOT0_ICLASSES, SLOT1_ICLASSES, SLOT2_ICLASSES, SLOT3_ICLASSES)
 
-SLOT2_EXCEPTIONS = (Fastcorner9,)
+SLOT2_EXCEPTIONS = (Fastcorner9, All8, Any8)
 SLOTS_EXCEPTIONS = ((), (), SLOT2_EXCEPTIONS, ())
 
 

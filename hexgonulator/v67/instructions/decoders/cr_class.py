@@ -1,4 +1,5 @@
 from hexgonulator.common.bits_ops import substring, bit_at
+from hexgonulator.v67.instructions.concrete.add_to_pc import AddToPc
 from hexgonulator.v67.instructions.concrete.loop0_imm import Loop0Imm
 from hexgonulator.v67.instructions.concrete.loop0_reg import Loop0Reg
 from hexgonulator.v67.instructions.concrete.loop1_imm import Loop1Imm
@@ -31,3 +32,5 @@ def decode_cr_class(instruction):
         return Loop0Imm
     if bits_27_21 == 0b1001001:
         return Loop1Imm
+    if substring(instruction, 27, 16) == 0b101001001001:
+        return AddToPc

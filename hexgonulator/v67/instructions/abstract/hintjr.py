@@ -5,7 +5,7 @@ class Hintjr(Instruction):
     def __init__(self, instr, s):
         super().__init__(instr)
         self.s = s
-        
+
     def execute(self, processor):
         yield
         yield

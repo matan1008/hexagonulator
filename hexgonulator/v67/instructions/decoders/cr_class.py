@@ -28,6 +28,10 @@ from hexgonulator.v67.instructions.concrete.sp2loop0_imm import Sp2Loop0Imm
 from hexgonulator.v67.instructions.concrete.sp2loop0_reg import Sp2Loop0Reg
 from hexgonulator.v67.instructions.concrete.sp3loop0_imm import Sp3Loop0Imm
 from hexgonulator.v67.instructions.concrete.sp3loop0_reg import Sp3Loop0Reg
+from hexgonulator.v67.instructions.concrete.transfer_from_cr import TransferFromCr
+from hexgonulator.v67.instructions.concrete.transfer_pair_from_cr import TransferPairFromCr
+from hexgonulator.v67.instructions.concrete.transfer_pair_to_cr import TransferPairToCr
+from hexgonulator.v67.instructions.concrete.transfer_to_cr import TransferToCr
 
 
 def decode_cr_class(instruction):
@@ -94,3 +98,11 @@ def decode_cr_class(instruction):
         return Q6POrPnp
     if bits_27_20 == 0b10111111 and not bit_13:
         return Q6POrOrPpnp
+    if bits_27_21 == 0b0010001:
+        return TransferToCr
+    if bits_27_21 == 0b0011001:
+        return TransferPairToCr
+    if bits_27_21 == 0b1000000:
+        return TransferPairFromCr
+    if bits_27_21 == 0b1010000:
+        return TransferFromCr

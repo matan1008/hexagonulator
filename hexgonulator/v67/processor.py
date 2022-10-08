@@ -14,16 +14,12 @@ class HexagonV67:
         self.xunits = Xunits(self)
         self.memory = MemoryControllerHub()
         self.packet = []
-        self.pc_changed = False
 
     def mem_get(self, address, length):
         return self.memory[address, length]
 
-    def instr_set_pc(self, value):
-        self.registers.pc = value
-        self.pc_changed = True
-
     def cycle(self):
+        self.registers.npc_to_pc()
         self.packet = []
         for i in range(4):
             instruction_int = self.mem_get(self.registers.pc + (4 * i), 4)
@@ -31,13 +27,10 @@ class HexagonV67:
             self.packet.append(instr)
             if instr.parse_field == 0b11:
                 break
+        self.registers.pc = self.registers.pc + (4 * len(self.packet))
         self.xunits.set_instructions(self.sequencer.sequence(self.packet))
         self.xunits.cycle()
         self.test_loop()
-        if self.pc_changed:
-            self.pc_changed = False
-        else:
-            self.registers.pc += 4 * len(self.packet)
 
     def test_loop(self):
         if self.packet[0].parse_field == 0b10 and self.packet[1].parse_field == 0b10:
@@ -53,7 +46,7 @@ class HexagonV67:
                 self.registers.predicate[3] = 0xff
             self.registers.usr.lpcfg -= 1
         if self.registers.lc0 > 1:
-            self.instr_set_pc(self.registers.sa0)
+            self.registers.pc = self.registers.sa0
             self.registers.lc0 -= 1
 
     def endloop01(self):
@@ -62,15 +55,15 @@ class HexagonV67:
                 self.registers.predicate[3] = 0xff
             self.registers.usr.lpcfg -= 1
         if self.registers.lc0 > 1:
-            self.instr_set_pc(self.registers.sa0)
+            self.registers.pc = self.registers.sa0
             self.registers.lc0 -= 1
         elif self.registers.lc1 > 1:
-            self.instr_set_pc(self.registers.sa1)
+            self.registers.pc = self.registers.sa1
             self.registers.lc1 -= 1
 
     def endloop1(self):
         if self.registers.lc1 > 1:
-            self.instr_set_pc(self.registers.sa1)
+            self.registers.pc = self.registers.sa1
             self.registers.lc1 -= 1
 
     def apply_extension(self, bits: int, length: int, signed=False):

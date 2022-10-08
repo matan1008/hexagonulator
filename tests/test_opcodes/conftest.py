@@ -13,4 +13,5 @@ def hexagon():
     proc = HexagonV67()
     proc.memory.controllers.append(MemoryController(mem, start=OPCODE_ADDR, end=OPCODE_ADDR + 8))
     proc.registers.pc = OPCODE_ADDR
+    proc.registers.npc_to_pc()
     return proc

@@ -38,7 +38,8 @@ class Registers:
         # The user status register (USR) stores processor status and control bits that are accessible by user programs.
         self.usr = UserStatusRegister()
         # The Program Counter (PC) register points to the next instruction packet to execute.
-        self.pc = 0x00000000
+        self._pc = 0x00000000
+        self.npc = 0x00000000
         # The user general pointer (UGP) register is a general-purpose control register.
         self.ugp = 0x00000000
         # The Global Pointer (GP) is used in GP-relative addressing.
@@ -50,6 +51,17 @@ class Registers:
         # processor cycles executed since the Hexagon processor was last reset.
         self.upcyclelo = 0x00000000
         self.upcyclehi = 0x00000000
+
+    @property
+    def pc(self):
+        return self._pc
+
+    @pc.setter
+    def pc(self, value):
+        self.npc = value
+
+    def npc_to_pc(self):
+        self._pc = self.npc
 
     def transfer_write_control_register(self, d, value):
         if d == 0:

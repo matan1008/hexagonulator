@@ -1,5 +1,8 @@
-from hexgonulator.common.bits_ops import substring
+from hexgonulator.common.bits_ops import substring, bit_at
+from hexgonulator.v67.instructions.concrete.call import Call
 from hexgonulator.v67.instructions.concrete.callr import Callr
+from hexgonulator.v67.instructions.concrete.conditional_call import ConditionalCall
+from hexgonulator.v67.instructions.concrete.conditional_call_not import ConditionalCallNot
 from hexgonulator.v67.instructions.concrete.conditional_callr import ConditionalCallr
 from hexgonulator.v67.instructions.concrete.conditional_callr_not import ConditionalCallrNot
 from hexgonulator.v67.instructions.concrete.conditional_jumpr import ConditionalJumpr
@@ -45,3 +48,17 @@ def decode_jr_class(instruction):
         bit_12_11 = substring(instruction, 12, 11)
         return CONDITIONAL_JUMPR_NOT_12_11[bit_12_11]
     return DECODING_27_21.get(bits_27_21)
+
+
+def decode_j_jr_class(instruction):
+    bits_27_21 = substring(instruction, 27, 21)
+    bits_27_24 = substring(instruction, 27, 24)
+    bit_21 = bit_at(instruction, 21)
+    if bits_27_21 in (0b0011010, 0b0011011, 0b0000101, 0b0001000, 0b0001001, 0b0010101, 0b0010100):
+        return decode_jr_class(instruction)
+    if substring(instruction, 27, 25) == 0b101:
+        return Call
+    if bits_27_24 == 0b1101 and not bit_21:
+        return ConditionalCall
+    if bits_27_24 == 0b1101 and bit_21:
+        return ConditionalCallNot

@@ -53,6 +53,14 @@ class Registers:
         self.upcyclehi = 0x00000000
 
     @property
+    def lr(self):
+        return self.general[31]
+
+    @lr.setter
+    def lr(self, value):
+        self.general[31] = value
+
+    @property
     def pc(self):
         return self._pc
 

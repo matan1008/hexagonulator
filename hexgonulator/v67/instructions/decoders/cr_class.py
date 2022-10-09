@@ -32,6 +32,7 @@ from hexgonulator.v67.instructions.concrete.transfer_from_cr import TransferFrom
 from hexgonulator.v67.instructions.concrete.transfer_pair_from_cr import TransferPairFromCr
 from hexgonulator.v67.instructions.concrete.transfer_pair_to_cr import TransferPairToCr
 from hexgonulator.v67.instructions.concrete.transfer_to_cr import TransferToCr
+from .j_class import decode_j_class_6
 
 
 def decode_cr_class(instruction):
@@ -106,3 +107,4 @@ def decode_cr_class(instruction):
         return TransferPairFromCr
     if bits_27_21 == 0b1010000:
         return TransferFromCr
+    return decode_j_class_6(instruction)

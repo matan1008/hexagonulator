@@ -77,6 +77,14 @@ from hexgonulator.v67.instructions.concrete.conditional_jump_not import Conditio
 from hexgonulator.v67.instructions.concrete.conditional_jump_not_hint import ConditionalJumpNotHint
 from hexgonulator.v67.instructions.concrete.conditional_jump_not_new import ConditionalJumpNotNew
 from hexgonulator.v67.instructions.concrete.conditional_jump_not_new_hint import ConditionalJumpNotNewHint
+from hexgonulator.v67.instructions.concrete.conditional_jump_reg_eq_zero import ConditionalJumpRegEqZero
+from hexgonulator.v67.instructions.concrete.conditional_jump_reg_eq_zero_hint import ConditionalJumpRegEqZeroHint
+from hexgonulator.v67.instructions.concrete.conditional_jump_reg_gt_zero import ConditionalJumpRegGtZero
+from hexgonulator.v67.instructions.concrete.conditional_jump_reg_gt_zero_hint import ConditionalJumpRegGtZeroHint
+from hexgonulator.v67.instructions.concrete.conditional_jump_reg_lt_zero import ConditionalJumpRegLtZero
+from hexgonulator.v67.instructions.concrete.conditional_jump_reg_lt_zero_hint import ConditionalJumpRegLtZeroHint
+from hexgonulator.v67.instructions.concrete.conditional_jump_reg_not_zero import ConditionalJumpRegNotZero
+from hexgonulator.v67.instructions.concrete.conditional_jump_reg_not_zero_hint import ConditionalJumpRegNotZeroHint
 from hexgonulator.v67.instructions.concrete.conditional_jumpr import ConditionalJumpr
 from hexgonulator.v67.instructions.concrete.conditional_jumpr_hint import ConditionalJumprHint
 from hexgonulator.v67.instructions.concrete.conditional_jumpr_new import ConditionalJumprNew
@@ -211,6 +219,17 @@ CONDITIONAL_JUMP_NOT_HINT_NEW = {
     (0b1, 0b1, 0b1): ConditionalJumpNotNewHint,
 }
 
+CONDITIONAL_JUMP_REG_OP_HINT = {
+    (0b00, 0b0): ConditionalJumpRegNotZero,
+    (0b00, 0b1): ConditionalJumpRegNotZeroHint,
+    (0b01, 0b0): ConditionalJumpRegGtZero,
+    (0b01, 0b1): ConditionalJumpRegGtZeroHint,
+    (0b10, 0b0): ConditionalJumpRegEqZero,
+    (0b10, 0b1): ConditionalJumpRegEqZeroHint,
+    (0b11, 0b0): ConditionalJumpRegLtZero,
+    (0b11, 0b1): ConditionalJumpRegLtZeroHint,
+}
+
 
 def decode_jr_class(instruction):
     bits_27_21 = substring(instruction, 27, 21)
@@ -253,3 +272,9 @@ def decode_j_class_1(instruction):
         return CMP_IMM_P_OP_NOT_HINT[bit_at(instruction, 25), bits_24_23, bit_22, bit_13]
     if substring(instruction, 27, 25) == 0b010 and bits_24_23 != 0b11:
         return CMP_REG_OP_NOT_HINT_P[bits_24_23, bit_22, bit_13, bit_at(instruction, 12)]
+
+
+def decode_j_class_6(instruction):
+    bits_27_24 = substring(instruction, 27, 24)
+    if bits_27_24 == 0b0001:
+        return CONDITIONAL_JUMP_REG_OP_HINT[substring(instruction, 23, 22), bit_at(instruction, 12)]

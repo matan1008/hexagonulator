@@ -96,6 +96,8 @@ from hexgonulator.v67.instructions.concrete.conditional_jumpr_not_new_hint impor
 from hexgonulator.v67.instructions.concrete.hintjr import Hintjr
 from hexgonulator.v67.instructions.concrete.jump import Jump
 from hexgonulator.v67.instructions.concrete.jumpr import Jumpr
+from hexgonulator.v67.instructions.concrete.transfer_and_jump_imm import TransferAndJumpImm
+from hexgonulator.v67.instructions.concrete.transfer_and_jump_reg import TransferAndJumpReg
 from hexgonulator.v67.instructions.concrete.tstbit_and_jump_p0 import TstbitAndJumpP0
 from hexgonulator.v67.instructions.concrete.tstbit_and_jump_p0_hint import TstbitAndJumpP0Hint
 from hexgonulator.v67.instructions.concrete.tstbit_and_jump_p0_not import TstbitAndJumpP0Not
@@ -272,6 +274,10 @@ def decode_j_class_1(instruction):
         return CMP_IMM_P_OP_NOT_HINT[bit_at(instruction, 25), bits_24_23, bit_22, bit_13]
     if substring(instruction, 27, 25) == 0b010 and bits_24_23 != 0b11:
         return CMP_REG_OP_NOT_HINT_P[bits_24_23, bit_22, bit_13, bit_at(instruction, 12)]
+    if substring(instruction, 27, 24) == 0b0110:
+        return TransferAndJumpImm
+    if substring(instruction, 27, 24) == 0b0111:
+        return TransferAndJumpReg
 
 
 def decode_j_class_6(instruction):

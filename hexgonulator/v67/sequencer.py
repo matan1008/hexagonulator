@@ -13,6 +13,8 @@ from .instructions.abstract.predicate_or_and import PredicateOrAnd
 from .instructions.abstract.predicate_or_or import PredicateOrOr
 from .instructions.abstract.predicate_xor import PredicateXor
 from .instructions.abstract.tstbit_and_jump import TstbitAndJump
+from .instructions.concrete.conditional_jump import ConditionalJump
+from .instructions.concrete.jump import Jump
 
 SLOT3_ICLASSES = (0b0001, 0b0010, 0b0101, 0b0110, 0b0111, 0b0101, 0b1000, 0b1011, 0b1100, 0b1101, 0b1110, 0b1111)
 SLOT2_ICLASSES = (0b0001, 0b0010, 0b0101, 0b0111, 0b0101, 0b1000, 0b1011, 0b1100, 0b1101, 0b1110, 0b1111)
@@ -25,8 +27,8 @@ SLOT2_EXCEPTIONS = (
     Fastcorner9, All8, Any8, PredicateAnd, PredicateAndAnd, PredicateAndOr, PredicateNot, PredicateOr, PredicateOrAnd,
     PredicateOrOr, PredicateXor
 )
-SLOT1_EXCEPTIONS = (CmpEqAndJump, CmpGtAndJump, CmpGtuAndJump, TstbitAndJump)
-SLOT0_EXCEPTIONS = (CmpEqAndJump, CmpGtAndJump, CmpGtuAndJump, TstbitAndJump)
+SLOT1_EXCEPTIONS = (CmpEqAndJump, CmpGtAndJump, CmpGtuAndJump, TstbitAndJump, Jump, ConditionalJump)
+SLOT0_EXCEPTIONS = (CmpEqAndJump, CmpGtAndJump, CmpGtuAndJump, TstbitAndJump, Jump, ConditionalJump)
 SLOTS_EXCEPTIONS = (SLOT0_EXCEPTIONS, SLOT1_EXCEPTIONS, SLOT2_EXCEPTIONS, ())
 
 

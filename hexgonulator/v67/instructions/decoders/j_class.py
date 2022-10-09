@@ -71,8 +71,12 @@ from hexgonulator.v67.instructions.concrete.conditional_callr import Conditional
 from hexgonulator.v67.instructions.concrete.conditional_callr_not import ConditionalCallrNot
 from hexgonulator.v67.instructions.concrete.conditional_jump import ConditionalJump
 from hexgonulator.v67.instructions.concrete.conditional_jump_hint import ConditionalJumpHint
+from hexgonulator.v67.instructions.concrete.conditional_jump_new import ConditionalJumpNew
+from hexgonulator.v67.instructions.concrete.conditional_jump_new_hint import ConditionalJumpNewHint
 from hexgonulator.v67.instructions.concrete.conditional_jump_not import ConditionalJumpNot
 from hexgonulator.v67.instructions.concrete.conditional_jump_not_hint import ConditionalJumpNotHint
+from hexgonulator.v67.instructions.concrete.conditional_jump_not_new import ConditionalJumpNotNew
+from hexgonulator.v67.instructions.concrete.conditional_jump_not_new_hint import ConditionalJumpNotNewHint
 from hexgonulator.v67.instructions.concrete.conditional_jumpr import ConditionalJumpr
 from hexgonulator.v67.instructions.concrete.conditional_jumpr_hint import ConditionalJumprHint
 from hexgonulator.v67.instructions.concrete.conditional_jumpr_new import ConditionalJumprNew
@@ -196,11 +200,15 @@ CMP_REG_OP_NOT_HINT_P = {
     (0b10, 0b1, 0b1, 0b1): CmpGtuAndJumpP1RegNotHint,
 }
 
-CONDITIONAL_JUMP_NOT_HINT = {
-    (0b0, 0b0): ConditionalJump,
-    (0b0, 0b1): ConditionalJumpHint,
-    (0b1, 0b0): ConditionalJumpNot,
-    (0b1, 0b1): ConditionalJumpNotHint,
+CONDITIONAL_JUMP_NOT_HINT_NEW = {
+    (0b0, 0b0, 0b0): ConditionalJump,
+    (0b0, 0b1, 0b0): ConditionalJumpHint,
+    (0b1, 0b0, 0b0): ConditionalJumpNot,
+    (0b1, 0b1, 0b0): ConditionalJumpNotHint,
+    (0b0, 0b0, 0b1): ConditionalJumpNew,
+    (0b0, 0b1, 0b1): ConditionalJumpNewHint,
+    (0b1, 0b0, 0b1): ConditionalJumpNotNew,
+    (0b1, 0b1, 0b1): ConditionalJumpNotNewHint,
 }
 
 
@@ -230,7 +238,7 @@ def decode_j_jr_class(instruction):
     if substring(instruction, 27, 25) == 0b100:
         return Jump
     if bits_27_24 == 0b1100:
-        return CONDITIONAL_JUMP_NOT_HINT[bit_21, bit_at(instruction, 12)]
+        return CONDITIONAL_JUMP_NOT_HINT_NEW[bit_21, bit_at(instruction, 12), bit_at(instruction, 11)]
 
 
 def decode_j_class_1(instruction):

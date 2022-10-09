@@ -1,5 +1,8 @@
 from .instructions.abstract.all8 import All8
 from .instructions.abstract.any8 import Any8
+from .instructions.abstract.cmp_eq_and_jump import CmpEqAndJump
+from .instructions.abstract.cmp_gt_and_jump import CmpGtAndJump
+from .instructions.abstract.cmp_gtu_and_jump import CmpGtuAndJump
 from .instructions.abstract.fastcorner9 import Fastcorner9
 from .instructions.abstract.predicate_and import PredicateAnd
 from .instructions.abstract.predicate_and_and import PredicateAndAnd
@@ -9,6 +12,7 @@ from .instructions.abstract.predicate_or import PredicateOr
 from .instructions.abstract.predicate_or_and import PredicateOrAnd
 from .instructions.abstract.predicate_or_or import PredicateOrOr
 from .instructions.abstract.predicate_xor import PredicateXor
+from .instructions.abstract.tstbit_and_jump import TstbitAndJump
 
 SLOT3_ICLASSES = (0b0001, 0b0010, 0b0101, 0b0110, 0b0111, 0b0101, 0b1000, 0b1011, 0b1100, 0b1101, 0b1110, 0b1111)
 SLOT2_ICLASSES = (0b0001, 0b0010, 0b0101, 0b0111, 0b0101, 0b1000, 0b1011, 0b1100, 0b1101, 0b1110, 0b1111)
@@ -21,7 +25,9 @@ SLOT2_EXCEPTIONS = (
     Fastcorner9, All8, Any8, PredicateAnd, PredicateAndAnd, PredicateAndOr, PredicateNot, PredicateOr, PredicateOrAnd,
     PredicateOrOr, PredicateXor
 )
-SLOTS_EXCEPTIONS = ((), (), SLOT2_EXCEPTIONS, ())
+SLOT1_EXCEPTIONS = (CmpEqAndJump, CmpGtAndJump, CmpGtuAndJump, TstbitAndJump)
+SLOT0_EXCEPTIONS = (CmpEqAndJump, CmpGtAndJump, CmpGtuAndJump, TstbitAndJump)
+SLOTS_EXCEPTIONS = (SLOT0_EXCEPTIONS, SLOT1_EXCEPTIONS, SLOT2_EXCEPTIONS, ())
 
 
 class Sequencer:

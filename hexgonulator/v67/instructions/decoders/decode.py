@@ -1,11 +1,12 @@
 from hexgonulator.common.bits_ops import substring
 from .alu32_class import decode_alu_32_class
 from .cr_class import decode_cr_class
-from .j_class import decode_j_jr_class
+from .j_class import decode_j_jr_class, decode_j_class_1
 from ..concrete.constant_extender import ConstantExtender
 
 DECODERS = {
     0b0000: lambda instruction: ConstantExtender,
+    0b0001: decode_j_class_1,
     0b0101: decode_j_jr_class,
     0b0110: decode_cr_class,
     0b0111: decode_alu_32_class,

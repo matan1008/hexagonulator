@@ -1,25 +1,6 @@
-from hexgonulator.common.bits_ops import bit_at, set_bit_at, substring, set_substring
-
-
-class UserStatusRegister:
-    def __init__(self):
-        self.value = 0x00000000
-
-    @property
-    def lpcfg(self):
-        return substring(self.value, 9, 8)
-
-    @lpcfg.setter
-    def lpcfg(self, value):
-        self.value = set_substring(self.value, 9, 8, value)
-
-    @property
-    def ovf(self):
-        return bit_at(self.value, 0)
-
-    @ovf.setter
-    def ovf(self, value):
-        self.value = set_bit_at(self.value, 0, value)
+from hexgonulator.common.bits_ops import substring, set_substring
+from hexgonulator.v67.core_registers.modifier_register import ModifierRegister
+from hexgonulator.v67.core_registers.user_status_register import UserStatusRegister
 
 
 class Registers:
@@ -33,8 +14,8 @@ class Registers:
         # Predicate registers
         self.predicate = [0x00 for _ in range(4)]
         # Modifier registers
-        self.m0 = 0x00000000
-        self.m1 = 0x00000000
+        self.m0 = ModifierRegister()
+        self.m1 = ModifierRegister()
         # The user status register (USR) stores processor status and control bits that are accessible by user programs.
         self.usr = UserStatusRegister()
         # The Program Counter (PC) register points to the next instruction packet to execute.
@@ -87,9 +68,9 @@ class Registers:
             # Reserved
             pass
         elif d == 6:
-            self.m0 = value
+            self.m0.value = value
         elif d == 7:
-            self.m1 = value
+            self.m1.value = value
         elif d == 8:
             self.usr.value = value
         elif d == 9:
@@ -126,9 +107,9 @@ class Registers:
             # Reserved
             return 0x00000000
         if d == 6:
-            return self.m0
+            return self.m0.value
         if d == 7:
-            return self.m1
+            return self.m1.value
         if d == 8:
             return self.usr.value
         if d == 9:

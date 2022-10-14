@@ -1,6 +1,6 @@
 import pytest
 
-from hexgonulator.common.bits_ops import substring, to_unsigned
+from hexgonulator.common.bits_ops import substring, to_unsigned, bit_reverse
 
 
 @pytest.mark.parametrize('bits, msb, lsb, result', [
@@ -19,3 +19,14 @@ def test_substring(bits: int, msb: int, lsb: int, result: int):
 ])
 def test_to_unsigned(bits: int, length: int, result: int):
     assert to_unsigned(bits, length) == result
+
+
+@pytest.mark.parametrize('bits, length, result', [
+    (0xff00, 16, 0x00ff),
+    (0b1100, 4, 0b0011),
+    (0b1010, 4, 0b0101),
+    (0b101, 3, 0b101),
+    (0b001, 3, 0b100),
+])
+def test_bit_reverse(bits: int, length: int, result: int):
+    assert bit_reverse(bits, length) == result

@@ -70,3 +70,7 @@ def unsigned_sat_q(i: int, n: int):
 
 def sign_extend(x: int, src_length: int, dst_length: int) -> int:
     return to_unsigned(to_signed(x, src_length), dst_length)
+
+
+def bit_reverse(bits: int, length: int):
+    return int(f'{bits:02b}'.rjust(length, '0')[::-1], 2)

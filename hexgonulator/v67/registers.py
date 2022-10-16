@@ -1,4 +1,4 @@
-from hexgonulator.common.bits_ops import substring, set_substring
+from hexgonulator.common.bits_ops import substring, set_substring, lower_chunk
 from hexgonulator.v67.core_registers.modifier_register import ModifierRegister
 from hexgonulator.v67.core_registers.user_status_register import UserStatusRegister
 
@@ -126,3 +126,10 @@ class Registers:
             return self.upcyclelo
         if d == 15:
             return self.upcyclehi
+
+    def get_general_pair(self, r):
+        return set_substring(self.general[r], 63, 32, self.general[r + 1])
+
+    def set_general_pair(self, r, value):
+        self.general[r] = lower_chunk(value, 32)
+        self.general[r + 1] = substring(value, 63, 32)

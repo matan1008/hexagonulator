@@ -1,4 +1,4 @@
-from hexgonulator.common.bits_ops import lower_chunk, substring, to_unsigned, bit_reverse, set_substring
+from hexgonulator.common.bits_ops import substring, to_unsigned, bit_reverse, set_substring
 from hexgonulator.v67.instructions.instruction import Instruction
 
 
@@ -17,6 +17,5 @@ class ReadDBrevIncrementReg(Instruction):
         data = processor.mem_get(ea, 8)
         yield
         processor.registers.general[self.x] = to_unsigned(rx + m.value, 32)
-        processor.registers.general[self.d] = lower_chunk(data, 32)
-        processor.registers.general[self.d + 1] = substring(data, 63, 32)
+        processor.registers.set_general_pair(self.d, data)
         yield

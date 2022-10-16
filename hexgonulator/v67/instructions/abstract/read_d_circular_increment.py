@@ -1,4 +1,4 @@
-from hexgonulator.common.bits_ops import lower_chunk, substring, to_signed
+from hexgonulator.common.bits_ops import to_signed
 from hexgonulator.v67.instructions.instruction import Instruction
 
 
@@ -20,6 +20,5 @@ class ReadDCircularIncrement(Instruction):
         data = processor.mem_get(ea, 8)
         yield
         processor.registers.general[self.x] = new_pointer
-        processor.registers.general[self.d] = lower_chunk(data, 32)
-        processor.registers.general[self.d + 1] = substring(data, 63, 32)
+        processor.registers.set_general_pair(self.d, data)
         yield

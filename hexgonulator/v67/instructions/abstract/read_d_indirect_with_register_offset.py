@@ -1,4 +1,3 @@
-from hexgonulator.common.bits_ops import lower_chunk, substring
 from hexgonulator.v67.instructions.instruction import Instruction
 
 
@@ -17,6 +16,5 @@ class ReadDIndirectWithRegisterOffset(Instruction):
         ea = rs + (rt << self.shift)
         data = processor.mem_get(ea, 8)
         yield
-        processor.registers.general[self.d] = lower_chunk(data, 32)
-        processor.registers.general[self.d + 1] = substring(data, 63, 32)
+        processor.registers.set_general_pair(self.d, data)
         yield

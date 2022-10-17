@@ -33,6 +33,23 @@ from hexgonulator.v67.instructions.concrete.conditional_read_d_reg_reg_off_new i
 from hexgonulator.v67.instructions.concrete.conditional_read_d_reg_reg_off_not import ConditionalReadDRegRegOffNot
 from hexgonulator.v67.instructions.concrete.conditional_read_d_reg_reg_off_not_new import \
     ConditionalReadDRegRegOffNotNew
+from hexgonulator.v67.instructions.concrete.conditional_read_h_imm import ConditionalReadHImm
+from hexgonulator.v67.instructions.concrete.conditional_read_h_imm_new import ConditionalReadHImmNew
+from hexgonulator.v67.instructions.concrete.conditional_read_h_imm_not import ConditionalReadHImmNot
+from hexgonulator.v67.instructions.concrete.conditional_read_h_imm_not_new import ConditionalReadHImmNotNew
+from hexgonulator.v67.instructions.concrete.conditional_read_h_inc_imm import ConditionalReadHIncImm
+from hexgonulator.v67.instructions.concrete.conditional_read_h_inc_imm_new import ConditionalReadHIncImmNew
+from hexgonulator.v67.instructions.concrete.conditional_read_h_inc_imm_not import ConditionalReadHIncImmNot
+from hexgonulator.v67.instructions.concrete.conditional_read_h_inc_imm_not_new import ConditionalReadHIncImmNotNew
+from hexgonulator.v67.instructions.concrete.conditional_read_h_reg_imm import ConditionalReadHRegImm
+from hexgonulator.v67.instructions.concrete.conditional_read_h_reg_imm_new import ConditionalReadHRegImmNew
+from hexgonulator.v67.instructions.concrete.conditional_read_h_reg_imm_not import ConditionalReadHRegImmNot
+from hexgonulator.v67.instructions.concrete.conditional_read_h_reg_imm_not_new import ConditionalReadHRegImmNotNew
+from hexgonulator.v67.instructions.concrete.conditional_read_h_reg_reg_off import ConditionalReadHRegRegOff
+from hexgonulator.v67.instructions.concrete.conditional_read_h_reg_reg_off_new import ConditionalReadHRegRegOffNew
+from hexgonulator.v67.instructions.concrete.conditional_read_h_reg_reg_off_not import ConditionalReadHRegRegOffNot
+from hexgonulator.v67.instructions.concrete.conditional_read_h_reg_reg_off_not_new import \
+    ConditionalReadHRegRegOffNotNew
 from hexgonulator.v67.instructions.concrete.memb_fifo_im_circ import MembFifoImCirc
 from hexgonulator.v67.instructions.concrete.memb_fifo_imm_reg_off import MembFifoImmRegOff
 from hexgonulator.v67.instructions.concrete.memb_fifo_inc_imm import MembFifoIncImm
@@ -136,6 +153,34 @@ CONDITIONAL_READ_B_IMM_NEW_NOT = {
     (0b1, 0b1): ConditionalReadBImmNotNew,
 }
 
+CONDITIONAL_READ_H_REG_REG_OFF_NEW_NOT = {
+    (0b0, 0b0): ConditionalReadHRegRegOff,
+    (0b0, 0b1): ConditionalReadHRegRegOffNot,
+    (0b1, 0b0): ConditionalReadHRegRegOffNew,
+    (0b1, 0b1): ConditionalReadHRegRegOffNotNew,
+}
+
+CONDITIONAL_READ_H_REG_IMM_NOT_NEW = {
+    (0b0, 0b0): ConditionalReadHRegImm,
+    (0b0, 0b1): ConditionalReadHRegImmNew,
+    (0b1, 0b0): ConditionalReadHRegImmNot,
+    (0b1, 0b1): ConditionalReadHRegImmNotNew,
+}
+
+CONDITIONAL_READ_H_INC_IMM_NEW_NOT = {
+    (0b0, 0b0): ConditionalReadHIncImm,
+    (0b0, 0b1): ConditionalReadHIncImmNot,
+    (0b1, 0b0): ConditionalReadHIncImmNew,
+    (0b1, 0b1): ConditionalReadHIncImmNotNew,
+}
+
+CONDITIONAL_READ_H_IMM_NEW_NOT = {
+    (0b0, 0b0): ConditionalReadHImm,
+    (0b0, 0b1): ConditionalReadHImmNot,
+    (0b1, 0b0): ConditionalReadHImmNew,
+    (0b1, 0b1): ConditionalReadHImmNotNew,
+}
+
 
 def decode_class_3(instruction):
     bits_27_21 = substring(instruction, 27, 21)
@@ -149,6 +194,8 @@ def decode_class_3(instruction):
         return CONDITIONAL_READ_B_REG_REG_OFF_NEW_NOT[bit_at(instruction, 25), bit_at(instruction, 24)]
     if bits_27_21 == 0b1010010:
         return ReadHRegRegOff
+    if substring(instruction, 27, 26) == 0b00 and substring(instruction, 23, 21) == 0b010:
+        return CONDITIONAL_READ_H_REG_REG_OFF_NEW_NOT[bit_at(instruction, 25), bit_at(instruction, 24)]
 
 
 def decode_class_4(instruction):
@@ -164,6 +211,8 @@ def decode_class_4(instruction):
         return CONDITIONAL_READ_B_REG_IMM_NOT_NEW[bit_at(instruction, 26), bit_at(instruction, 25)]
     if bit_27 == 0b1 and bits_24_21 == 0b1010:
         return ReadHGpImm
+    if bit_27 == 0b0 and bits_24_21 == 0b1010:
+        return CONDITIONAL_READ_H_REG_IMM_NOT_NEW[bit_at(instruction, 26), bit_at(instruction, 25)]
 
 
 def decode_class_9(instruction):
@@ -258,3 +307,7 @@ def decode_class_9(instruction):
         return ReadHIncReg
     if bits_27_21 == 0b1111010 and bit_12 == 0b0 and bit_7 == 0b0:
         return ReadHIncRegBrev
+    if bits_27_21 == 0b1011010 and bit_at(instruction, 13):
+        return CONDITIONAL_READ_H_INC_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
+    if bits_27_21 == 0b1111010 and bit_at(instruction, 13) and bit_7:
+        return CONDITIONAL_READ_H_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]

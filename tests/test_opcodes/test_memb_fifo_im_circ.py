@@ -1,12 +1,9 @@
-from hexgonulator.memory.controller import MemoryController
-from hexgonulator.memory.ram import RAM
+from tests.test_opcodes.common import add_memory
 
 
 def test_memb_fifo_im_circ(hexagon):
-    mem = RAM(8)
-    mem.write(0, 4, b'\x77\x00\x00\x00')
-    hexagon.memory.controllers.append(MemoryController(mem, start=0x40000020, end=0x40000024))
     hexagon.memory.controllers[0].mem.write(0, 4, b'\x21\xc0\x80\x98')
+    add_memory(hexagon, b'\x77\x00\x00\x00', 0x40000020)
     hexagon.registers.m0.length = 0x10
     hexagon.registers.cs0 = 0x40000020
     hexagon.registers.general[0] = 0x40000020
@@ -19,10 +16,8 @@ def test_memb_fifo_im_circ(hexagon):
 
 
 def test_memb_fifo_im_circ_overflow(hexagon):
-    mem = RAM(8)
-    mem.write(0, 4, b'\x77\x00\x00\x00')
-    hexagon.memory.controllers.append(MemoryController(mem, start=0x40000020, end=0x40000024))
     hexagon.memory.controllers[0].mem.write(0, 4, b'\x21\xc0\x80\x98')
+    add_memory(hexagon, b'\x77\x00\x00\x00', 0x40000020)
     hexagon.registers.m0.length = 0x11
     hexagon.registers.cs0 = 0x40000010
     hexagon.registers.general[0] = 0x40000020
@@ -35,10 +30,8 @@ def test_memb_fifo_im_circ_overflow(hexagon):
 
 
 def test_memb_fifo_im_circ_underflow(hexagon):
-    mem = RAM(8)
-    mem.write(0, 4, b'\x77\x00\x00\x00')
-    hexagon.memory.controllers.append(MemoryController(mem, start=0x40000020, end=0x40000024))
     hexagon.memory.controllers[0].mem.write(0, 4, b'\xe1\xc1\x80\x98')
+    add_memory(hexagon, b'\x77\x00\x00\x00', 0x40000020)
     hexagon.registers.m0.length = 0x10
     hexagon.registers.cs0 = 0x40000020
     hexagon.registers.general[0] = 0x40000020

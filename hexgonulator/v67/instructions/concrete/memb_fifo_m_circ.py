@@ -1,4 +1,4 @@
-from hexgonulator.common.bits_ops import substring, bit_at, to_signed
+from hexgonulator.common.bits_ops import substring, bit_at
 from ..abstract.memb_fifo_circular_increment import MembFifoCircularIncrement
 
 

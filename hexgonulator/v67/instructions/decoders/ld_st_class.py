@@ -33,6 +33,14 @@ from hexgonulator.v67.instructions.concrete.conditional_read_d_reg_reg_off_new i
 from hexgonulator.v67.instructions.concrete.conditional_read_d_reg_reg_off_not import ConditionalReadDRegRegOffNot
 from hexgonulator.v67.instructions.concrete.conditional_read_d_reg_reg_off_not_new import \
     ConditionalReadDRegRegOffNotNew
+from hexgonulator.v67.instructions.concrete.memb_fifo_im_circ import MembFifoImCirc
+from hexgonulator.v67.instructions.concrete.memb_fifo_imm_reg_off import MembFifoImmRegOff
+from hexgonulator.v67.instructions.concrete.memb_fifo_inc_imm import MembFifoIncImm
+from hexgonulator.v67.instructions.concrete.memb_fifo_inc_reg import MembFifoIncReg
+from hexgonulator.v67.instructions.concrete.memb_fifo_inc_reg_brev import MembFifoIncRegBrev
+from hexgonulator.v67.instructions.concrete.memb_fifo_m_circ import MembFifoMCirc
+from hexgonulator.v67.instructions.concrete.memb_fifo_reg_imm import MembFifoRegImm
+from hexgonulator.v67.instructions.concrete.memb_fifo_set_imm import MembFifoSetImm
 from hexgonulator.v67.instructions.concrete.q6_r_memb_im_circ import Q6RMembImCirc
 from hexgonulator.v67.instructions.concrete.q6_r_memb_m_circ import Q6RMembMCirc
 from hexgonulator.v67.instructions.concrete.q6_r_memd_im_circ import Q6RMemdImCirc
@@ -180,3 +188,19 @@ def decode_class_9(instruction):
         return CONDITIONAL_READ_B_INC_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
     if bits_27_21 == 0b1111000 and bit_at(instruction, 13) and bit_7:
         return CONDITIONAL_READ_B_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
+    if bit_at(instruction, 27) == 0b0 and substring(instruction, 24, 21) == 0b0100:
+        return MembFifoRegImm
+    if bits_27_21 == 0b1000100 and bit_12 == 0b0 and bit_at(instruction, 9) == 0b0:
+        return MembFifoImCirc
+    if bits_27_21 == 0b1000100 and bit_12 == 0b0 and bit_at(instruction, 9) == 0b1 and bit_7 == 0b0:
+        return MembFifoMCirc
+    if bits_27_21 == 0b1010100 and substring(instruction, 13, 12) == 0b01:
+        return MembFifoSetImm
+    if bits_27_21 == 0b1010100 and substring(instruction, 13, 12) == 0b00:
+        return MembFifoIncImm
+    if bits_27_21 == 0b1100100 and bit_12 == 0b1:
+        return MembFifoImmRegOff
+    if bits_27_21 == 0b1100100 and bit_12 == 0b0 and bit_7 == 0b0:
+        return MembFifoIncReg
+    if bits_27_21 == 0b1110100 and bit_12 == 0b0 and bit_7 == 0b0:
+        return MembFifoIncRegBrev

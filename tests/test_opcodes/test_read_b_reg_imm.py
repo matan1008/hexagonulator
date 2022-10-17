@@ -9,7 +9,7 @@ def test_read_b_reg_imm(hexagon):
     assert hexagon.registers.general[1] == 0xfffffff0
 
 
-def test_read_d_reg_imm_apply_extension(hexagon):
+def test_read_b_reg_imm_apply_extension(hexagon):
     hexagon.memory.controllers[0].mem.write(0, 8, b'\x00\x40\x00\x04\x01\xc0\x00\x97')
     add_memory(hexagon, b'\xf0\x00\x00\x00', 0x40000020)
     hexagon.registers.general[0] = 0x20

@@ -15,7 +15,7 @@ class MembFifoCircularIncrement(Instruction):
         ryy = processor.registers.get_general_pair(self.y)
         m = processor.registers.m0 if self.mu == 0 else processor.registers.m1
         yield
-        offset = self.imm if self.imm is not None else to_signed(m.i, 14)
+        offset = self.imm if self.imm is not None else to_signed(m.i, 11)
         start_addr = processor.registers.cs0 if self.mu == 0 else processor.registers.cs1
         new_pointer = ((rx + offset - start_addr) % m.length) + start_addr
         tmp_v = processor.mem_get(rx, 1)

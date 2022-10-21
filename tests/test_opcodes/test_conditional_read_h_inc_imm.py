@@ -12,7 +12,7 @@ def test_conditional_read_h_inc_imm(hexagon):
 
 
 def test_conditional_read_h_inc_imm_false(hexagon):
-    hexagon.memory.controllers[0].mem.write(0, 4, b'\xe1\xe1\x00\x9b')
+    hexagon.memory.controllers[0].mem.write(0, 4, b'\xe1\xe1\x40\x9b')
     add_memory(hexagon, b'\x00\xf0\x00\x00', 0x40000020)
     hexagon.registers.general[0] = 0x40000020
     hexagon.cycle()

@@ -1,0 +1,10 @@
+from tests.test_opcodes.common import add_memory
+
+
+def test_read_w_reg_reg_off(hexagon):
+    hexagon.memory.controllers[0].mem.write(0, 4, b'\x82\xc1\x80\x3a')
+    add_memory(hexagon, b'\x44\x33\x22\x11', 0x40000020)
+    hexagon.registers.general[0] = 0x40000000
+    hexagon.registers.general[1] = 0x10
+    hexagon.cycle()
+    assert hexagon.registers.general[2] == 0x11223344

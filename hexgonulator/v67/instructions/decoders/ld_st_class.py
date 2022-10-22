@@ -110,6 +110,8 @@ from hexgonulator.v67.instructions.concrete.q6_r_memub_im_circ import Q6RMemubIm
 from hexgonulator.v67.instructions.concrete.q6_r_memub_m_circ import Q6RMemubMCirc
 from hexgonulator.v67.instructions.concrete.q6_r_memuh_im_circ import Q6RMemuhImCirc
 from hexgonulator.v67.instructions.concrete.q6_r_memuh_m_circ import Q6RMemuhMCirc
+from hexgonulator.v67.instructions.concrete.q6_r_memw_im_circ import Q6RMemwImCirc
+from hexgonulator.v67.instructions.concrete.q6_r_memw_m_circ import Q6RMemwMCirc
 from hexgonulator.v67.instructions.concrete.read_b_gp_imm import ReadBGpImm
 from hexgonulator.v67.instructions.concrete.read_b_imm_reg_off import ReadBImmRegOff
 from hexgonulator.v67.instructions.concrete.read_b_inc_imm import ReadBIncImm
@@ -150,6 +152,14 @@ from hexgonulator.v67.instructions.concrete.read_uh_inc_reg_brev import ReadUhIn
 from hexgonulator.v67.instructions.concrete.read_uh_reg_imm import ReadUhRegImm
 from hexgonulator.v67.instructions.concrete.read_uh_reg_reg_off import ReadUhRegRegOff
 from hexgonulator.v67.instructions.concrete.read_uh_set_imm import ReadUhSetImm
+from hexgonulator.v67.instructions.concrete.read_w_gp_imm import ReadWGpImm
+from hexgonulator.v67.instructions.concrete.read_w_imm_reg_off import ReadWImmRegOff
+from hexgonulator.v67.instructions.concrete.read_w_inc_imm import ReadWIncImm
+from hexgonulator.v67.instructions.concrete.read_w_inc_reg import ReadWIncReg
+from hexgonulator.v67.instructions.concrete.read_w_inc_reg_brev import ReadWIncRegBrev
+from hexgonulator.v67.instructions.concrete.read_w_reg_imm import ReadWRegImm
+from hexgonulator.v67.instructions.concrete.read_w_reg_reg_off import ReadWRegRegOff
+from hexgonulator.v67.instructions.concrete.read_w_set_imm import ReadWSetImm
 
 CONDITIONAL_READ_D_REG_REG_OFF_NEW_NOT = {
     (0b0, 0b0): ConditionalReadDRegRegOff,
@@ -314,6 +324,8 @@ def decode_class_3(instruction):
         return ReadUhRegRegOff
     if substring(instruction, 27, 26) == 0b00 and substring(instruction, 23, 21) == 0b011:
         return CONDITIONAL_READ_UH_REG_REG_OFF_NEW_NOT[bit_at(instruction, 25), bit_at(instruction, 24)]
+    if bits_27_21 == 0b1010100:
+        return ReadWRegRegOff
 
 
 def decode_class_4(instruction):
@@ -339,6 +351,8 @@ def decode_class_4(instruction):
         return ReadUhGpImm
     if bit_27 == 0b0 and bits_24_21 == 0b1011:
         return CONDITIONAL_READ_UH_REG_IMM_NOT_NEW[bit_at(instruction, 26), bit_at(instruction, 25)]
+    if bit_27 == 0b1 and bits_24_21 == 0b1100:
+        return ReadWGpImm
 
 
 def decode_class_9(instruction):
@@ -477,3 +491,19 @@ def decode_class_9(instruction):
         return CONDITIONAL_READ_UH_INC_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
     if bits_27_21 == 0b1111011 and bit_at(instruction, 13) and bit_7:
         return CONDITIONAL_READ_UH_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
+    if bit_at(instruction, 27) == 0b0 and substring(instruction, 24, 21) == 0b1100:
+        return ReadWRegImm
+    if bits_27_21 == 0b1001100 and bit_12 == 0b0 and bit_at(instruction, 9) == 0b0:
+        return Q6RMemwImCirc
+    if bits_27_21 == 0b1001100 and bit_12 == 0b0 and bit_at(instruction, 9) == 0b1 and bit_7 == 0b0:
+        return Q6RMemwMCirc
+    if bits_27_21 == 0b1011100 and substring(instruction, 13, 12) == 0b01:
+        return ReadWSetImm
+    if bits_27_21 == 0b1011100 and substring(instruction, 13, 12) == 0b00:
+        return ReadWIncImm
+    if bits_27_21 == 0b1101100 and bit_12 == 0b1:
+        return ReadWImmRegOff
+    if bits_27_21 == 0b1101100 and bit_12 == 0b0 and bit_7 == 0b0:
+        return ReadWIncReg
+    if bits_27_21 == 0b1111100 and bit_12 == 0b0 and bit_7 == 0b0:
+        return ReadWIncRegBrev

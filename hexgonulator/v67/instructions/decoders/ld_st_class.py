@@ -101,6 +101,7 @@ from hexgonulator.v67.instructions.concrete.conditional_read_w_reg_reg_off_new i
 from hexgonulator.v67.instructions.concrete.conditional_read_w_reg_reg_off_not import ConditionalReadWRegRegOffNot
 from hexgonulator.v67.instructions.concrete.conditional_read_w_reg_reg_off_not_new import \
     ConditionalReadWRegRegOffNotNew
+from hexgonulator.v67.instructions.concrete.deallocframe import Deallocframe
 from hexgonulator.v67.instructions.concrete.memb_fifo_im_circ import MembFifoImCirc
 from hexgonulator.v67.instructions.concrete.memb_fifo_imm_reg_off import MembFifoImmRegOff
 from hexgonulator.v67.instructions.concrete.memb_fifo_inc_imm import MembFifoIncImm
@@ -560,3 +561,5 @@ def decode_class_9(instruction):
         return CONDITIONAL_READ_W_INC_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
     if bits_27_21 == 0b1111100 and bit_at(instruction, 13) and bit_7:
         return CONDITIONAL_READ_W_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
+    if bits_27_21 == 0b0000000 and bit_at(instruction, 13) == 0b0:
+        return Deallocframe

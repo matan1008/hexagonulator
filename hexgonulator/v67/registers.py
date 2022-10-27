@@ -32,6 +32,27 @@ class Registers:
         # processor cycles executed since the Hexagon processor was last reset.
         self.upcyclelo = 0x00000000
         self.upcyclehi = 0x00000000
+        # The frame limit register stores the low address of the memory area reserved for the software stack
+        self.framelimit = 0x00000000
+        # The frame key register stores the key value that is used to XOR-scramble return addresses when they are
+        # stored on the software stack
+        self.framekey = 0x00000000
+
+    @property
+    def sp(self):
+        return self.general[29]
+
+    @sp.setter
+    def sp(self, value):
+        self.general[29] = value
+
+    @property
+    def fp(self):
+        return self.general[30]
+
+    @fp.setter
+    def fp(self, value):
+        self.general[30] = value
 
     @property
     def lr(self):

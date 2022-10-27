@@ -73,3 +73,6 @@ class HexagonV67:
         if signed:
             bits = to_signed(bits, length)
         return bits
+
+    def frame_unscramble(self, data):
+        return data ^ (self.registers.framekey << 32)

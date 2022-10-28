@@ -1,4 +1,11 @@
 from hexgonulator.common.bits_ops import substring, bit_at
+from hexgonulator.v67.instructions.concrete.conditional_dealloc_return import ConditionalDeallocReturn
+from hexgonulator.v67.instructions.concrete.conditional_dealloc_return_new import ConditionalDeallocReturnNew
+from hexgonulator.v67.instructions.concrete.conditional_dealloc_return_new_hint import ConditionalDeallocReturnNewHint
+from hexgonulator.v67.instructions.concrete.conditional_dealloc_return_not import ConditionalDeallocReturnNot
+from hexgonulator.v67.instructions.concrete.conditional_dealloc_return_not_new import ConditionalDeallocReturnNotNew
+from hexgonulator.v67.instructions.concrete.conditional_dealloc_return_not_new_hint import \
+    ConditionalDeallocReturnNotNewHint
 from hexgonulator.v67.instructions.concrete.conditional_read_b_imm import ConditionalReadBImm
 from hexgonulator.v67.instructions.concrete.conditional_read_b_imm_new import ConditionalReadBImmNew
 from hexgonulator.v67.instructions.concrete.conditional_read_b_imm_not import ConditionalReadBImmNot
@@ -101,6 +108,7 @@ from hexgonulator.v67.instructions.concrete.conditional_read_w_reg_reg_off_new i
 from hexgonulator.v67.instructions.concrete.conditional_read_w_reg_reg_off_not import ConditionalReadWRegRegOffNot
 from hexgonulator.v67.instructions.concrete.conditional_read_w_reg_reg_off_not_new import \
     ConditionalReadWRegRegOffNotNew
+from hexgonulator.v67.instructions.concrete.dealloc_return import DeallocReturn
 from hexgonulator.v67.instructions.concrete.deallocframe import Deallocframe
 from hexgonulator.v67.instructions.concrete.memb_fifo_im_circ import MembFifoImCirc
 from hexgonulator.v67.instructions.concrete.memb_fifo_imm_reg_off import MembFifoImmRegOff
@@ -347,6 +355,15 @@ CONDITIONAL_READ_W_IMM_NEW_NOT = {
     (0b1, 0b1): ConditionalReadWImmNotNew,
 }
 
+CONDITIONAL_DEALLOC_RETURN_NOT_HINT_NEW = {
+    (0b0, 0b0, 0b1): ConditionalDeallocReturnNew,
+    (0b0, 0b1, 0b0): ConditionalDeallocReturn,
+    (0b0, 0b1, 0b1): ConditionalDeallocReturnNewHint,
+    (0b1, 0b0, 0b1): ConditionalDeallocReturnNotNew,
+    (0b1, 0b1, 0b0): ConditionalDeallocReturnNot,
+    (0b1, 0b1, 0b1): ConditionalDeallocReturnNotNewHint,
+}
+
 
 def decode_class_3(instruction):
     bits_27_21 = substring(instruction, 27, 21)
@@ -407,6 +424,7 @@ def decode_class_4(instruction):
 
 def decode_class_9(instruction):
     bits_27_21 = substring(instruction, 27, 21)
+    bit_13 = bit_at(instruction, 13)
     bit_12 = bit_at(instruction, 12)
     bit_7 = bit_at(instruction, 7)
     if bit_at(instruction, 27) == 0b0 and substring(instruction, 24, 21) == 0b1110:
@@ -425,9 +443,9 @@ def decode_class_9(instruction):
         return ReadDIncReg
     if bits_27_21 == 0b1111110 and bit_12 == 0b0 and bit_7 == 0b0:
         return ReadDIncRegBrev
-    if bits_27_21 == 0b1011110 and bit_at(instruction, 13):
+    if bits_27_21 == 0b1011110 and bit_13:
         return CONDITIONAL_READ_D_INC_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
-    if bits_27_21 == 0b1111110 and bit_at(instruction, 13) and bit_7:
+    if bits_27_21 == 0b1111110 and bit_13 and bit_7:
         return CONDITIONAL_READ_D_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
     if bit_at(instruction, 27) == 0b0 and substring(instruction, 24, 21) == 0b1000:
         return ReadBRegImm
@@ -445,9 +463,9 @@ def decode_class_9(instruction):
         return ReadBIncReg
     if bits_27_21 == 0b1111000 and bit_12 == 0b0 and bit_7 == 0b0:
         return ReadBIncRegBrev
-    if bits_27_21 == 0b1011000 and bit_at(instruction, 13):
+    if bits_27_21 == 0b1011000 and bit_13:
         return CONDITIONAL_READ_B_INC_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
-    if bits_27_21 == 0b1111000 and bit_at(instruction, 13) and bit_7:
+    if bits_27_21 == 0b1111000 and bit_13 and bit_7:
         return CONDITIONAL_READ_B_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
     if bit_at(instruction, 27) == 0b0 and substring(instruction, 24, 21) == 0b0100:
         return MembFifoRegImm
@@ -497,9 +515,9 @@ def decode_class_9(instruction):
         return ReadHIncReg
     if bits_27_21 == 0b1111010 and bit_12 == 0b0 and bit_7 == 0b0:
         return ReadHIncRegBrev
-    if bits_27_21 == 0b1011010 and bit_at(instruction, 13):
+    if bits_27_21 == 0b1011010 and bit_13:
         return CONDITIONAL_READ_H_INC_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
-    if bits_27_21 == 0b1111010 and bit_at(instruction, 13) and bit_7:
+    if bits_27_21 == 0b1111010 and bit_13 and bit_7:
         return CONDITIONAL_READ_H_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
     if bit_at(instruction, 27) == 0b0 and substring(instruction, 24, 21) == 0b1001:
         return ReadUbRegImm
@@ -517,9 +535,9 @@ def decode_class_9(instruction):
         return ReadUbIncReg
     if bits_27_21 == 0b1111001 and bit_12 == 0b0 and bit_7 == 0b0:
         return ReadUbIncRegBrev
-    if bits_27_21 == 0b1011001 and bit_at(instruction, 13):
+    if bits_27_21 == 0b1011001 and bit_13:
         return CONDITIONAL_READ_UB_INC_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
-    if bits_27_21 == 0b1111001 and bit_at(instruction, 13) and bit_7:
+    if bits_27_21 == 0b1111001 and bit_13 and bit_7:
         return CONDITIONAL_READ_UB_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
     if bit_at(instruction, 27) == 0b0 and substring(instruction, 24, 21) == 0b1011:
         return ReadUhRegImm
@@ -537,9 +555,9 @@ def decode_class_9(instruction):
         return ReadUhIncReg
     if bits_27_21 == 0b1111011 and bit_12 == 0b0 and bit_7 == 0b0:
         return ReadUhIncRegBrev
-    if bits_27_21 == 0b1011011 and bit_at(instruction, 13):
+    if bits_27_21 == 0b1011011 and bit_13:
         return CONDITIONAL_READ_UH_INC_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
-    if bits_27_21 == 0b1111011 and bit_at(instruction, 13) and bit_7:
+    if bits_27_21 == 0b1111011 and bit_13 and bit_7:
         return CONDITIONAL_READ_UH_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
     if bit_at(instruction, 27) == 0b0 and substring(instruction, 24, 21) == 0b1100:
         return ReadWRegImm
@@ -557,9 +575,13 @@ def decode_class_9(instruction):
         return ReadWIncReg
     if bits_27_21 == 0b1111100 and bit_12 == 0b0 and bit_7 == 0b0:
         return ReadWIncRegBrev
-    if bits_27_21 == 0b1011100 and bit_at(instruction, 13):
+    if bits_27_21 == 0b1011100 and bit_13:
         return CONDITIONAL_READ_W_INC_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
-    if bits_27_21 == 0b1111100 and bit_at(instruction, 13) and bit_7:
+    if bits_27_21 == 0b1111100 and bit_13 and bit_7:
         return CONDITIONAL_READ_W_IMM_NEW_NOT[bit_12, bit_at(instruction, 11)]
-    if bits_27_21 == 0b0000000 and bit_at(instruction, 13) == 0b0:
+    if bits_27_21 == 0b0000000 and bit_13 == 0b0:
         return Deallocframe
+    if bits_27_21 == 0b0110000 and substring(instruction, 13, 10) == 0b0000:
+        return DeallocReturn
+    if bits_27_21 == 0b0110000 and substring(instruction, 12, 11) != 0b00 and bit_at(instruction, 10) == 0b0:
+        return CONDITIONAL_DEALLOC_RETURN_NOT_HINT_NEW[bit_13, bit_12, bit_at(instruction, 11)]

@@ -18,6 +18,9 @@ class HexagonV67:
     def mem_get(self, address, length):
         return self.memory[address, length]
 
+    def mem_set(self, address, length, value):
+        self.memory[address, length] = value
+
     def cycle(self):
         self.registers.npc_to_pc()
         self.packet = []

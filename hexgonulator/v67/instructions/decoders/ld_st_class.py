@@ -142,6 +142,10 @@ from hexgonulator.v67.instructions.concrete.membh_pair_reg_imm import MembhPairR
 from hexgonulator.v67.instructions.concrete.membh_pair_set_imm import MembhPairSetImm
 from hexgonulator.v67.instructions.concrete.membh_reg_imm import MembhRegImm
 from hexgonulator.v67.instructions.concrete.membh_set_imm import MembhSetImm
+from hexgonulator.v67.instructions.concrete.memh_add_imm import MemhAddImm
+from hexgonulator.v67.instructions.concrete.memh_add_reg import MemhAddReg
+from hexgonulator.v67.instructions.concrete.memh_and_reg import MemhAndReg
+from hexgonulator.v67.instructions.concrete.memh_clrbit import MemhClrbit
 from hexgonulator.v67.instructions.concrete.memh_fifo_im_circ import MemhFifoImCirc
 from hexgonulator.v67.instructions.concrete.memh_fifo_imm_reg_off import MemhFifoImmRegOff
 from hexgonulator.v67.instructions.concrete.memh_fifo_inc_imm import MemhFifoIncImm
@@ -150,6 +154,10 @@ from hexgonulator.v67.instructions.concrete.memh_fifo_inc_reg_brev import MemhFi
 from hexgonulator.v67.instructions.concrete.memh_fifo_m_circ import MemhFifoMCirc
 from hexgonulator.v67.instructions.concrete.memh_fifo_reg_imm import MemhFifoRegImm
 from hexgonulator.v67.instructions.concrete.memh_fifo_set_imm import MemhFifoSetImm
+from hexgonulator.v67.instructions.concrete.memh_or_reg import MemhOrReg
+from hexgonulator.v67.instructions.concrete.memh_setbit import MemhSetbit
+from hexgonulator.v67.instructions.concrete.memh_sub_imm import MemhSubImm
+from hexgonulator.v67.instructions.concrete.memh_sub_reg import MemhSubReg
 from hexgonulator.v67.instructions.concrete.memubh_im_circ import MemubhImCirc
 from hexgonulator.v67.instructions.concrete.memubh_imm_reg_off import MemubhImmRegOff
 from hexgonulator.v67.instructions.concrete.memubh_inc_imm import MemubhIncImm
@@ -474,6 +482,20 @@ MEMOP_MEMB_IMM_OP = {
     0b11: MembSetbit,
 }
 
+MEMOP_MEMH_REG_OP = {
+    0b00: MemhAddReg,
+    0b01: MemhSubReg,
+    0b10: MemhAndReg,
+    0b11: MemhOrReg,
+}
+
+MEMOP_MEMH_IMM_OP = {
+    0b00: MemhAddImm,
+    0b01: MemhSubImm,
+    0b10: MemhClrbit,
+    0b11: MemhSetbit,
+}
+
 
 def decode_class_3(instruction):
     bits_27_21 = substring(instruction, 27, 21)
@@ -506,6 +528,10 @@ def decode_class_3(instruction):
         return MEMOP_MEMB_REG_OP[substring(instruction, 6, 5)]
     if bits_27_24 == 0b1111 and substring(instruction, 22, 21) == 0b00 and bit_at(instruction, 13) == 0b0:
         return MEMOP_MEMB_IMM_OP[substring(instruction, 6, 5)]
+    if bits_27_24 == 0b1110 and substring(instruction, 22, 21) == 0b01 and bit_at(instruction, 13) == 0b0:
+        return MEMOP_MEMH_REG_OP[substring(instruction, 6, 5)]
+    if bits_27_24 == 0b1111 and substring(instruction, 22, 21) == 0b01 and bit_at(instruction, 13) == 0b0:
+        return MEMOP_MEMH_IMM_OP[substring(instruction, 6, 5)]
 
 
 def decode_class_4(instruction):

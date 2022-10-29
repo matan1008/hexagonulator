@@ -26,3 +26,4 @@ def add_memory(hexagon, data, address):
     mem = RAM(len(data))
     mem.write(0, len(data), data)
     hexagon.memory.controllers.append(MemoryController(mem, start=address, end=address + len(data)))
+    return mem

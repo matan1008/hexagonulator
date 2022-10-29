@@ -174,6 +174,14 @@ from hexgonulator.v67.instructions.concrete.memubh_pair_reg_imm import MemubhPai
 from hexgonulator.v67.instructions.concrete.memubh_pair_set_imm import MemubhPairSetImm
 from hexgonulator.v67.instructions.concrete.memubh_reg_imm import MemubhRegImm
 from hexgonulator.v67.instructions.concrete.memubh_set_imm import MemubhSetImm
+from hexgonulator.v67.instructions.concrete.memw_add_imm import MemwAddImm
+from hexgonulator.v67.instructions.concrete.memw_add_reg import MemwAddReg
+from hexgonulator.v67.instructions.concrete.memw_and_reg import MemwAndReg
+from hexgonulator.v67.instructions.concrete.memw_clrbit import MemwClrbit
+from hexgonulator.v67.instructions.concrete.memw_or_reg import MemwOrReg
+from hexgonulator.v67.instructions.concrete.memw_setbit import MemwSetbit
+from hexgonulator.v67.instructions.concrete.memw_sub_imm import MemwSubImm
+from hexgonulator.v67.instructions.concrete.memw_sub_reg import MemwSubReg
 from hexgonulator.v67.instructions.concrete.q6_r_memb_im_circ import Q6RMembImCirc
 from hexgonulator.v67.instructions.concrete.q6_r_memb_m_circ import Q6RMembMCirc
 from hexgonulator.v67.instructions.concrete.q6_r_memd_im_circ import Q6RMemdImCirc
@@ -496,6 +504,20 @@ MEMOP_MEMH_IMM_OP = {
     0b11: MemhSetbit,
 }
 
+MEMOP_MEMW_REG_OP = {
+    0b00: MemwAddReg,
+    0b01: MemwSubReg,
+    0b10: MemwAndReg,
+    0b11: MemwOrReg,
+}
+
+MEMOP_MEMW_IMM_OP = {
+    0b00: MemwAddImm,
+    0b01: MemwSubImm,
+    0b10: MemwClrbit,
+    0b11: MemwSetbit,
+}
+
 
 def decode_class_3(instruction):
     bits_27_21 = substring(instruction, 27, 21)
@@ -532,6 +554,10 @@ def decode_class_3(instruction):
         return MEMOP_MEMH_REG_OP[substring(instruction, 6, 5)]
     if bits_27_24 == 0b1111 and substring(instruction, 22, 21) == 0b01 and bit_at(instruction, 13) == 0b0:
         return MEMOP_MEMH_IMM_OP[substring(instruction, 6, 5)]
+    if bits_27_24 == 0b1110 and substring(instruction, 22, 21) == 0b10 and bit_at(instruction, 13) == 0b0:
+        return MEMOP_MEMW_REG_OP[substring(instruction, 6, 5)]
+    if bits_27_24 == 0b1111 and substring(instruction, 22, 21) == 0b10 and bit_at(instruction, 13) == 0b0:
+        return MEMOP_MEMW_IMM_OP[substring(instruction, 6, 5)]
 
 
 def decode_class_4(instruction):

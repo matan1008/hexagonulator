@@ -118,6 +118,22 @@ from hexgonulator.v67.instructions.concrete.memb_fifo_inc_reg_brev import MembFi
 from hexgonulator.v67.instructions.concrete.memb_fifo_m_circ import MembFifoMCirc
 from hexgonulator.v67.instructions.concrete.memb_fifo_reg_imm import MembFifoRegImm
 from hexgonulator.v67.instructions.concrete.memb_fifo_set_imm import MembFifoSetImm
+from hexgonulator.v67.instructions.concrete.membh_im_circ import MembhImCirc
+from hexgonulator.v67.instructions.concrete.membh_imm_reg_off import MembhImmRegOff
+from hexgonulator.v67.instructions.concrete.membh_inc_imm import MembhIncImm
+from hexgonulator.v67.instructions.concrete.membh_inc_reg import MembhIncReg
+from hexgonulator.v67.instructions.concrete.membh_inc_reg_brev import MembhIncRegBrev
+from hexgonulator.v67.instructions.concrete.membh_m_circ import MembhMCirc
+from hexgonulator.v67.instructions.concrete.membh_pair_im_circ import MembhPairImCirc
+from hexgonulator.v67.instructions.concrete.membh_pair_imm_reg_off import MembhPairImmRegOff
+from hexgonulator.v67.instructions.concrete.membh_pair_inc_imm import MembhPairIncImm
+from hexgonulator.v67.instructions.concrete.membh_pair_inc_reg import MembhPairIncReg
+from hexgonulator.v67.instructions.concrete.membh_pair_inc_reg_brev import MembhPairIncRegBrev
+from hexgonulator.v67.instructions.concrete.membh_pair_m_circ import MembhPairMCirc
+from hexgonulator.v67.instructions.concrete.membh_pair_reg_imm import MembhPairRegImm
+from hexgonulator.v67.instructions.concrete.membh_pair_set_imm import MembhPairSetImm
+from hexgonulator.v67.instructions.concrete.membh_reg_imm import MembhRegImm
+from hexgonulator.v67.instructions.concrete.membh_set_imm import MembhSetImm
 from hexgonulator.v67.instructions.concrete.memh_fifo_im_circ import MemhFifoImCirc
 from hexgonulator.v67.instructions.concrete.memh_fifo_imm_reg_off import MemhFifoImmRegOff
 from hexgonulator.v67.instructions.concrete.memh_fifo_inc_imm import MemhFifoIncImm
@@ -126,6 +142,22 @@ from hexgonulator.v67.instructions.concrete.memh_fifo_inc_reg_brev import MemhFi
 from hexgonulator.v67.instructions.concrete.memh_fifo_m_circ import MemhFifoMCirc
 from hexgonulator.v67.instructions.concrete.memh_fifo_reg_imm import MemhFifoRegImm
 from hexgonulator.v67.instructions.concrete.memh_fifo_set_imm import MemhFifoSetImm
+from hexgonulator.v67.instructions.concrete.memubh_im_circ import MemubhImCirc
+from hexgonulator.v67.instructions.concrete.memubh_imm_reg_off import MemubhImmRegOff
+from hexgonulator.v67.instructions.concrete.memubh_inc_imm import MemubhIncImm
+from hexgonulator.v67.instructions.concrete.memubh_inc_reg import MemubhIncReg
+from hexgonulator.v67.instructions.concrete.memubh_inc_reg_brev import MemubhIncRegBrev
+from hexgonulator.v67.instructions.concrete.memubh_m_circ import MemubhMCirc
+from hexgonulator.v67.instructions.concrete.memubh_pair_im_circ import MemubhPairImCirc
+from hexgonulator.v67.instructions.concrete.memubh_pair_imm_reg_off import MemubhPairImmRegOff
+from hexgonulator.v67.instructions.concrete.memubh_pair_inc_imm import MemubhPairIncImm
+from hexgonulator.v67.instructions.concrete.memubh_pair_inc_reg import MemubhPairIncReg
+from hexgonulator.v67.instructions.concrete.memubh_pair_inc_reg_brev import MemubhPairIncRegBrev
+from hexgonulator.v67.instructions.concrete.memubh_pair_m_circ import MemubhPairMCirc
+from hexgonulator.v67.instructions.concrete.memubh_pair_reg_imm import MemubhPairRegImm
+from hexgonulator.v67.instructions.concrete.memubh_pair_set_imm import MemubhPairSetImm
+from hexgonulator.v67.instructions.concrete.memubh_reg_imm import MemubhRegImm
+from hexgonulator.v67.instructions.concrete.memubh_set_imm import MemubhSetImm
 from hexgonulator.v67.instructions.concrete.q6_r_memb_im_circ import Q6RMembImCirc
 from hexgonulator.v67.instructions.concrete.q6_r_memb_m_circ import Q6RMembMCirc
 from hexgonulator.v67.instructions.concrete.q6_r_memd_im_circ import Q6RMemdImCirc
@@ -364,6 +396,62 @@ CONDITIONAL_DEALLOC_RETURN_NOT_HINT_NEW = {
     (0b1, 0b1, 0b1): ConditionalDeallocReturnNotNewHint,
 }
 
+MEMBH_REG_IMM_PAIR_SIGN = {
+    (0b0, 0b0): MembhRegImm,
+    (0b0, 0b1): MemubhRegImm,
+    (0b1, 0b0): MemubhPairRegImm,
+    (0b1, 0b1): MembhPairRegImm,
+}
+
+MEMBH_IM_CIRC_PAIR_SIGN = {
+    (0b0, 0b0): MembhImCirc,
+    (0b0, 0b1): MemubhImCirc,
+    (0b1, 0b0): MemubhPairImCirc,
+    (0b1, 0b1): MembhPairImCirc,
+}
+
+MEMBH_M_CIRC_PAIR_SIGN = {
+    (0b0, 0b0): MembhMCirc,
+    (0b0, 0b1): MemubhMCirc,
+    (0b1, 0b0): MemubhPairMCirc,
+    (0b1, 0b1): MembhPairMCirc,
+}
+
+MEMBH_SET_IMM_PAIR_SIGN = {
+    (0b0, 0b0): MembhSetImm,
+    (0b0, 0b1): MemubhSetImm,
+    (0b1, 0b0): MemubhPairSetImm,
+    (0b1, 0b1): MembhPairSetImm,
+}
+
+MEMBH_INC_IMM_PAIR_SIGN = {
+    (0b0, 0b0): MembhIncImm,
+    (0b0, 0b1): MemubhIncImm,
+    (0b1, 0b0): MemubhPairIncImm,
+    (0b1, 0b1): MembhPairIncImm,
+}
+
+MEMBH_IMM_REG_OFF_PAIR_SIGN = {
+    (0b0, 0b0): MembhImmRegOff,
+    (0b0, 0b1): MemubhImmRegOff,
+    (0b1, 0b0): MemubhPairImmRegOff,
+    (0b1, 0b1): MembhPairImmRegOff,
+}
+
+MEMBH_INC_REG_PAIR_SIGN = {
+    (0b0, 0b0): MembhIncReg,
+    (0b0, 0b1): MemubhIncReg,
+    (0b1, 0b0): MemubhPairIncReg,
+    (0b1, 0b1): MembhPairIncReg,
+}
+
+MEMBH_INC_REG_BREV_PAIR_SIGN = {
+    (0b0, 0b0): MembhIncRegBrev,
+    (0b0, 0b1): MemubhIncRegBrev,
+    (0b1, 0b0): MemubhPairIncRegBrev,
+    (0b1, 0b1): MembhPairIncRegBrev,
+}
+
 
 def decode_class_3(instruction):
     bits_27_21 = substring(instruction, 27, 21)
@@ -585,3 +673,19 @@ def decode_class_9(instruction):
         return DeallocReturn
     if bits_27_21 == 0b0110000 and substring(instruction, 12, 11) != 0b00 and bit_at(instruction, 10) == 0b0:
         return CONDITIONAL_DEALLOC_RETURN_NOT_HINT_NEW[bit_13, bit_12, bit_at(instruction, 11)]
+    if bit_at(instruction, 27) == 0b0 and bit_at(instruction, 24) == 0b0 and bit_at(instruction, 21) == 0b1:
+        return MEMBH_REG_IMM_PAIR_SIGN[bit_at(instruction, 23), bit_at(instruction, 22)]
+    if bits_27_21 & 0b1111001 == 0b1000001 and bit_12 == 0b0 and bit_at(instruction, 9) == 0b0:
+        return MEMBH_IM_CIRC_PAIR_SIGN[bit_at(instruction, 23), bit_at(instruction, 22)]
+    if bits_27_21 & 0b1111001 == 0b1000001 and bit_12 == 0b0 and bit_at(instruction, 9) == 0b1 and bit_7 == 0b0:
+        return MEMBH_M_CIRC_PAIR_SIGN[bit_at(instruction, 23), bit_at(instruction, 22)]
+    if bits_27_21 & 0b1111001 == 0b1010001 and substring(instruction, 13, 12) == 0b01:
+        return MEMBH_SET_IMM_PAIR_SIGN[bit_at(instruction, 23), bit_at(instruction, 22)]
+    if bits_27_21 & 0b1111001 == 0b1010001 and substring(instruction, 13, 12) == 0b00:
+        return MEMBH_INC_IMM_PAIR_SIGN[bit_at(instruction, 23), bit_at(instruction, 22)]
+    if bits_27_21 & 0b1111001 == 0b1100001 and bit_12 == 0b1:
+        return MEMBH_IMM_REG_OFF_PAIR_SIGN[bit_at(instruction, 23), bit_at(instruction, 22)]
+    if bits_27_21 & 0b1111001 == 0b1100001 and bit_12 == 0b0 and bit_7 == 0b0:
+        return MEMBH_INC_REG_PAIR_SIGN[bit_at(instruction, 23), bit_at(instruction, 22)]
+    if bits_27_21 & 0b1111001 == 0b1110001 and bit_12 == 0b0 and bit_7 == 0b0:
+        return MEMBH_INC_REG_BREV_PAIR_SIGN[bit_at(instruction, 23), bit_at(instruction, 22)]

@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hexagonulator"
+version = "0.0.1"
+description = "Python emulator for hexagon"
+readme.file = "README.md"
+readme.content-type = "text/markdown"
+requires-python = ">=3.7"
+license = { file = "LICENSE" }
+authors = [
+    { email = "matan1008@gmail.com" },
+    { name = "Matan Perelman" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+]
+
+[project.urls]
+Homepage = "https://github.com/matan1008/hexagonulator"
+Source = "https://github.com/matan1008/hexagonulator"
+
+[project.optional-dependencies]
+testing = ["pytest"]
+
+[tool.setuptools.packages]
+find = { }
+
+[tool.distutils.bdist_wheel]
+universal = true

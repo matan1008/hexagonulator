@@ -17,6 +17,6 @@ class MembhAbsoluteSet(Instruction):
             extended = sign_extend(substring(data, (i * 8) + 7, i * 8), 8, 16)
             result = set_substring(result, (i * 16) + 15, i * 16, extended)
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         processor.registers.general[self.e] = self.imm
         yield

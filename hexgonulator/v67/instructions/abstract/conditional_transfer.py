@@ -18,5 +18,5 @@ class ConditionalTransfer(Instruction):
         if self.dot_new:
             pu = processor.registers.predicate[self.pu]
         if bit_at(pu, 0) == int(self.sense):
-            processor.registers.general[self.d] = to_unsigned(self.imm, 32)
+            self.set_new_value_register(processor, self.d, to_unsigned(self.imm, 32))
         yield

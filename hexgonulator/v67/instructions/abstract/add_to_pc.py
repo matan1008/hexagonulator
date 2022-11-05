@@ -13,5 +13,5 @@ class AddToPc(Instruction):
         yield
         result = to_unsigned(pc + self.imm, 32)
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         yield

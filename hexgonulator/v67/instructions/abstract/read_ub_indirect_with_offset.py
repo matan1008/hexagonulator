@@ -14,5 +14,5 @@ class ReadUbIndirectWithOffset(Instruction):
         ea = rs + self.imm
         data = processor.mem_get(ea, 1)
         yield
-        processor.registers.general[self.d] = data
+        self.set_new_value_register(processor, self.d, data)
         yield

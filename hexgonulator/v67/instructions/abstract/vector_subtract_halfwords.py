@@ -43,7 +43,7 @@ class VectorSubtractHalfwords(Instruction):
 
         result = set_substring(result_low, 31, 16, result_high)
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         if self.sat and saturated:
             processor.registers.usr.ovf = 1
         yield

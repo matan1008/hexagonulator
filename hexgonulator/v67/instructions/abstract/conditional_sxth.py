@@ -19,5 +19,5 @@ class ConditionalSxth(Instruction):
         if self.dot_new:
             pu = processor.registers.predicate[self.pu]
         if bit_at(pu, 0) == int(self.sense):
-            processor.registers.general[self.d] = sign_extend(lower_chunk(rs, 16), 16, 32)
+            self.set_new_value_register(processor, self.d, sign_extend(lower_chunk(rs, 16), 16, 32))
         yield

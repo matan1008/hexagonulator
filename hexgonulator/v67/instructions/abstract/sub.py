@@ -22,7 +22,7 @@ class Sub(Instruction):
         else:
             result = to_unsigned(result, 32)
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         if self.sat and saturated:
             processor.registers.usr.ovf = 1
         yield

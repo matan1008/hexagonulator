@@ -18,5 +18,5 @@ class MemubhIndirectIncrementImm(Instruction):
             result = set_substring(result, (i * 16) + 15, i * 16, substring(data, (i * 8) + 7, i * 8))
         yield
         processor.registers.general[self.x] = rx + self.imm
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         yield

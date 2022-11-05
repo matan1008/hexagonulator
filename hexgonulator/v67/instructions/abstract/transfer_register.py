@@ -11,5 +11,5 @@ class TransferRegister(Instruction):
         rs = processor.registers.general[self.s]
         yield
         yield
-        processor.registers.general[self.d] = rs
+        self.set_new_value_register(processor, self.d, rs)
         yield

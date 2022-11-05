@@ -14,5 +14,5 @@ class Xor(Instruction):
         yield
         result = rs ^ rt
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         yield

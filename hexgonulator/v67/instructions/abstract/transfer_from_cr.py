@@ -11,5 +11,5 @@ class TransferFromCr(Instruction):
         cs = processor.registers.transfer_read_control_register(self.s)
         yield
         yield
-        processor.registers.general[self.d] = cs
+        self.set_new_value_register(processor, self.d, cs)
         yield

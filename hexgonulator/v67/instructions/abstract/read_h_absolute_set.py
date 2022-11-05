@@ -13,6 +13,6 @@ class ReadHAbsoluteSet(Instruction):
         yield
         data = processor.mem_get(self.imm, 2)
         yield
-        processor.registers.general[self.d] = sign_extend(data, 16, 32)
+        self.set_new_value_register(processor, self.d, sign_extend(data, 16, 32))
         processor.registers.general[self.e] = self.imm
         yield

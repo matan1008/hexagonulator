@@ -15,6 +15,6 @@ class TransferAndJump(Instruction):
         yield
         pc = to_unsigned(processor.registers.pc + self.r, 32)
         yield
-        processor.registers.general[self.d] = transfer
+        self.set_new_value_register(processor, self.d, transfer)
         processor.registers.pc = pc
         yield

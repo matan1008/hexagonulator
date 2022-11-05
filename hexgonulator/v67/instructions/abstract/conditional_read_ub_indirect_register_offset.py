@@ -28,5 +28,5 @@ class ConditionalReadUbIndirectRegisterOffset(Instruction):
             if bit_at(pv, 0) == int(self.sense):
                 data = processor.mem_get(ea, 1)
         if data is not None:
-            processor.registers.general[self.d] = data
+            self.set_new_value_register(processor, self.d, data)
         yield

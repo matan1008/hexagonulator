@@ -13,6 +13,6 @@ class ReadBAbsoluteSet(Instruction):
         yield
         data = processor.mem_get(self.imm, 1)
         yield
-        processor.registers.general[self.d] = sign_extend(data, 8, 32)
+        self.set_new_value_register(processor, self.d, sign_extend(data, 8, 32))
         processor.registers.general[self.e] = self.imm
         yield

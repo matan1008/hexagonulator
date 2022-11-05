@@ -19,5 +19,5 @@ class Mux(Instruction):
         yield
         result = to_unsigned(first if bit_at(pu, 0) else second, 32)
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         yield

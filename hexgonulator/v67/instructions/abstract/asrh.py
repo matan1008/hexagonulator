@@ -13,5 +13,5 @@ class Asrh(Instruction):
         yield
         result = sign_extend(rs >> 16, 16, 32)
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         yield

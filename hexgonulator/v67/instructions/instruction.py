@@ -6,6 +6,7 @@ from hexgonulator.common.bits_ops import substring
 class Instruction(ABC):
     def __init__(self, instr):
         self.instr = instr
+        self.new_value_destination_register = None
 
     @classmethod
     def from_int(cls, instr, apply_extension=None):
@@ -25,4 +26,7 @@ class Instruction(ABC):
         Execute the opcode on the given processor
         :param processor: Processor to run opcode on.
         """
-        pass
+
+    def set_new_value_register(self, processor, register: int, value: int):
+        self.new_value_destination_register = register
+        processor.registers.general[register] = value

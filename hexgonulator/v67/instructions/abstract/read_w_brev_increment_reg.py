@@ -17,5 +17,5 @@ class ReadWBrevIncrementReg(Instruction):
         data = processor.mem_get(ea, 4)
         yield
         processor.registers.general[self.x] = to_unsigned(rx + m.value, 32)
-        processor.registers.general[self.d] = data
+        self.set_new_value_register(processor, self.d, data)
         yield

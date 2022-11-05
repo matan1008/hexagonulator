@@ -13,5 +13,5 @@ class Sxtb(Instruction):
         yield
         result = sign_extend(lower_chunk(rs, 8), 8, 32)
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         yield

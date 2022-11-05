@@ -12,6 +12,6 @@ class ReadWAbsoluteSet(Instruction):
         yield
         data = processor.mem_get(self.imm, 4)
         yield
-        processor.registers.general[self.d] = data
+        self.set_new_value_register(processor, self.d, data)
         processor.registers.general[self.e] = self.imm
         yield

@@ -13,5 +13,5 @@ class Aslh(Instruction):
         yield
         result = lower_chunk(rs, 16) << 16
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         yield

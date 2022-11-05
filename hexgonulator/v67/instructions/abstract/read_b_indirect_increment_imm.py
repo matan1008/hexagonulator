@@ -15,5 +15,5 @@ class ReadBIndirectIncrementImm(Instruction):
         data = processor.mem_get(rx, 1)
         yield
         processor.registers.general[self.x] = rx + self.imm
-        processor.registers.general[self.d] = sign_extend(data, 8, 32)
+        self.set_new_value_register(processor, self.d, sign_extend(data, 8, 32))
         yield

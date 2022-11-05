@@ -15,5 +15,5 @@ class ReadBIndirectWithOffset(Instruction):
         ea = rs + self.imm
         data = processor.mem_get(ea, 1)
         yield
-        processor.registers.general[self.d] = sign_extend(data, 8, 32)
+        self.set_new_value_register(processor, self.d, sign_extend(data, 8, 32))
         yield

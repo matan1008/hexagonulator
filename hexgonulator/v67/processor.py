@@ -4,7 +4,7 @@ from .instructions.decoders.decode import decode_instruction
 from .registers import Registers
 from .sequencer import Sequencer
 from .xunits import Xunits
-from ..common.bits_ops import set_substring, to_signed
+from ..common.bits_ops import set_substring, to_signed, substring
 
 
 class HexagonV67:
@@ -79,3 +79,7 @@ class HexagonV67:
 
     def frame_unscramble(self, data):
         return data ^ (self.registers.framekey << 32)
+
+    def get_new_value_operand(self, nt):
+        instructions = list(filter(None, self.sequencer.sequenced))
+        return self.registers.general[instructions[substring(nt, 2, 1)].new_value_destination_register]

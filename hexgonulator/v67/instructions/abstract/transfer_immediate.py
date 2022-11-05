@@ -12,5 +12,5 @@ class TransferImmediate(Instruction):
         yield
         result = to_unsigned(self.imm16, 32)
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         yield

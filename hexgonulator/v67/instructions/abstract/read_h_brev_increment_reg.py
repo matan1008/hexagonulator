@@ -17,5 +17,5 @@ class ReadHBrevIncrementReg(Instruction):
         data = processor.mem_get(ea, 2)
         yield
         processor.registers.general[self.x] = to_unsigned(rx + m.value, 32)
-        processor.registers.general[self.d] = sign_extend(data, 16, 32)
+        self.set_new_value_register(processor, self.d, sign_extend(data, 16, 32))
         yield

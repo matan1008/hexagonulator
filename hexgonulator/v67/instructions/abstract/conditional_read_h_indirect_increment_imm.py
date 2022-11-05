@@ -26,5 +26,5 @@ class ConditionalReadHIndirectIncrementImm(Instruction):
                 data = processor.mem_get(rx, 2)
         if data is not None:
             processor.registers.general[self.x] = rx + self.imm
-            processor.registers.general[self.d] = sign_extend(data, 16, 32)
+            self.set_new_value_register(processor, self.d, sign_extend(data, 16, 32))
         yield

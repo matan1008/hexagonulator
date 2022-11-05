@@ -20,5 +20,5 @@ class ReadUhCircularIncrement(Instruction):
         data = processor.mem_get(ea, 2)
         yield
         processor.registers.general[self.x] = new_pointer
-        processor.registers.general[self.d] = data
+        self.set_new_value_register(processor, self.d, data)
         yield

@@ -15,5 +15,5 @@ class ReadHGlobalPointerRelative(Instruction):
         ea = (gp if self.use_gp else 0) + self.imm
         data = processor.mem_get(ea, 2)
         yield
-        processor.registers.general[self.d] = sign_extend(data, 16, 32)
+        self.set_new_value_register(processor, self.d, sign_extend(data, 16, 32))
         yield

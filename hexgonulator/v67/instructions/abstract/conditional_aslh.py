@@ -19,6 +19,5 @@ class ConditionalAslh(Instruction):
         if self.dot_new:
             pu = processor.registers.predicate[self.pu]
         if bit_at(pu, 0) == int(self.sense):
-            rd = lower_chunk(rs, 16) << 16
-            processor.registers.general[self.d] = rd
+            self.set_new_value_register(processor, self.d, lower_chunk(rs, 16) << 16)
         yield

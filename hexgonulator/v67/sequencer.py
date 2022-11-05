@@ -33,20 +33,23 @@ SLOTS_EXCEPTIONS = (SLOT0_EXCEPTIONS, SLOT1_EXCEPTIONS, SLOT2_EXCEPTIONS, ())
 
 
 class Sequencer:
+    def __init__(self):
+        self.sequenced = [None, None, None, None]
+
     def sequence(self, instructions: list):
-        seq = [None, None, None, None]
+        self.sequenced = [None, None, None, None]
         lowest_occupied = 4
         for instruction in instructions:
             if instruction.iclass == 0b0000:
                 continue
             for slot in range(lowest_occupied - 1, -1, -1):
                 if self.fits_slot(instruction, slot):
-                    seq[slot] = instruction
+                    self.sequenced[slot] = instruction
                     lowest_occupied = slot
                     break
             else:
                 raise Exception('Sequencing failure')
-        return seq
+        return self.sequenced
 
     def fits_slot(self, instruction, slot):
         if instruction.iclass in SLOTS_ICLASSES[slot]:

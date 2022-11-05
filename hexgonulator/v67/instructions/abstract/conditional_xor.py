@@ -21,5 +21,5 @@ class ConditionalXor(Instruction):
         if self.dot_new:
             pu = processor.registers.predicate[self.pu]
         if bit_at(pu, 0) == int(self.sense):
-            processor.registers.general[self.d] = rs ^ rt
+            self.set_new_value_register(processor, self.d, rs ^ rt)
         yield

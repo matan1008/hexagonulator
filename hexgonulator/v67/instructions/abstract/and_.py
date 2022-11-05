@@ -16,5 +16,5 @@ class And(Instruction):
         yield
         result = rs & arg2
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         yield

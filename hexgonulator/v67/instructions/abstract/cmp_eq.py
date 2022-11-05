@@ -21,5 +21,5 @@ class CmpEq(Instruction):
         if self.pu is not None:
             processor.registers.predicate[self.pu] = result
         else:
-            processor.registers.general[self.d] = result
+            self.set_new_value_register(processor, self.d, result)
         yield

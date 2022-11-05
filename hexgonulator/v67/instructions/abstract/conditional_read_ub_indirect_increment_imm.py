@@ -26,5 +26,5 @@ class ConditionalReadUbIndirectIncrementImm(Instruction):
                 data = processor.mem_get(rx, 1)
         if data is not None:
             processor.registers.general[self.x] = rx + self.imm
-            processor.registers.general[self.d] = data
+            self.set_new_value_register(processor, self.d, data)
         yield

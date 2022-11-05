@@ -19,5 +19,5 @@ class CombineHalfwords(Instruction):
         low = substring(rs, 31, 16) if self.s_high else lower_chunk(rs, 16)
         result = (high << 16) | low
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         yield

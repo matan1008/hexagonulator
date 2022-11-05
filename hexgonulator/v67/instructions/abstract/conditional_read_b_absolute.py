@@ -23,5 +23,5 @@ class ConditionalReadBAbsolute(Instruction):
             if bit_at(pt, 0) == int(self.sense):
                 data = processor.mem_get(self.imm, 1)
         if data is not None:
-            processor.registers.general[self.d] = sign_extend(data, 8, 32)
+            self.set_new_value_register(processor, self.d, sign_extend(data, 8, 32))
         yield

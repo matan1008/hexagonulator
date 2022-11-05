@@ -17,5 +17,5 @@ class TransferImmediateHl(Instruction):
         else:
             result = set_substring(rx, 15, 0, self.imm16)
         yield
-        processor.registers.general[self.x] = result
+        self.set_new_value_register(processor, self.x, result)
         yield

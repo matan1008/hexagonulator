@@ -15,5 +15,5 @@ class OrNot(Instruction):
         yield
         result = rt | bit_not(rs, 32)
         yield
-        processor.registers.general[self.d] = result
+        self.set_new_value_register(processor, self.d, result)
         yield

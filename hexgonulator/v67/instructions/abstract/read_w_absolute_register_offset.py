@@ -15,5 +15,5 @@ class ReadWAbsoluteRegisterOffset(Instruction):
         ea = self.imm + (rt << self.shift)
         data = processor.mem_get(ea, 4)
         yield
-        processor.registers.general[self.d] = data
+        self.set_new_value_register(processor, self.d, data)
         yield

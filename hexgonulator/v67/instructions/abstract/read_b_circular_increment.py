@@ -20,5 +20,5 @@ class ReadBCircularIncrement(Instruction):
         data = processor.mem_get(ea, 1)
         yield
         processor.registers.general[self.x] = new_pointer
-        processor.registers.general[self.d] = sign_extend(data, 8, 32)
+        self.set_new_value_register(processor, self.d, sign_extend(data, 8, 32))
         yield

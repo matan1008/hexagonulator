@@ -13,4 +13,4 @@ class Q6REqualsI(TransferImmediate):
         return cls(instr, d=d, imm16=s16)
 
     def __repr__(self):
-        return f'R{self.d}=#{self.imm16})'
+        return f'R{self.d}=#{self.imm16}'

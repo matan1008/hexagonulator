@@ -10,4 +10,4 @@ class Q6REqualsR(TransferRegister):
         return cls(instr, d=d, s=s)
 
     def __repr__(self):
-        return f'R{self.d}=R{self.s})'
+        return f'R{self.d}=R{self.s}'

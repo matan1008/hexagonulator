@@ -25,6 +25,18 @@ from hexgonulator.v67.instructions.concrete.cmp_eq_and_jump_p1_reg import CmpEqA
 from hexgonulator.v67.instructions.concrete.cmp_eq_and_jump_p1_reg_hint import CmpEqAndJumpP1RegHint
 from hexgonulator.v67.instructions.concrete.cmp_eq_and_jump_p1_reg_not import CmpEqAndJumpP1RegNot
 from hexgonulator.v67.instructions.concrete.cmp_eq_and_jump_p1_reg_not_hint import CmpEqAndJumpP1RegNotHint
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_imm import CmpEqNewJumpImm
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_imm_hint import CmpEqNewJumpImmHint
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_imm_not import CmpEqNewJumpImmNot
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_imm_not_hint import CmpEqNewJumpImmNotHint
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_minus1 import CmpEqNewJumpMinus1
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_minus1_hint import CmpEqNewJumpMinus1Hint
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_minus1_not import CmpEqNewJumpMinus1Not
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_minus1_not_hint import CmpEqNewJumpMinus1NotHint
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_reg import CmpEqNewJumpReg
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_reg_hint import CmpEqNewJumpRegHint
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_reg_not import CmpEqNewJumpRegNot
+from hexgonulator.v67.instructions.concrete.cmp_eq_new_jump_reg_not_hint import CmpEqNewJumpRegNotHint
 from hexgonulator.v67.instructions.concrete.cmp_gt_and_jump_p0_imm import CmpGtAndJumpP0Imm
 from hexgonulator.v67.instructions.concrete.cmp_gt_and_jump_p0_imm_hint import CmpGtAndJumpP0ImmHint
 from hexgonulator.v67.instructions.concrete.cmp_gt_and_jump_p0_imm_not import CmpGtAndJumpP0ImmNot
@@ -49,6 +61,22 @@ from hexgonulator.v67.instructions.concrete.cmp_gt_and_jump_p1_reg import CmpGtA
 from hexgonulator.v67.instructions.concrete.cmp_gt_and_jump_p1_reg_hint import CmpGtAndJumpP1RegHint
 from hexgonulator.v67.instructions.concrete.cmp_gt_and_jump_p1_reg_not import CmpGtAndJumpP1RegNot
 from hexgonulator.v67.instructions.concrete.cmp_gt_and_jump_p1_reg_not_hint import CmpGtAndJumpP1RegNotHint
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_imm import CmpGtNewJumpImm
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_imm_hint import CmpGtNewJumpImmHint
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_imm_not import CmpGtNewJumpImmNot
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_imm_not_hint import CmpGtNewJumpImmNotHint
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_minus1 import CmpGtNewJumpMinus1
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_minus1_hint import CmpGtNewJumpMinus1Hint
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_minus1_not import CmpGtNewJumpMinus1Not
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_minus1_not_hint import CmpGtNewJumpMinus1NotHint
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_reg import CmpGtNewJumpReg
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_reg_hint import CmpGtNewJumpRegHint
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_reg_not import CmpGtNewJumpRegNot
+from hexgonulator.v67.instructions.concrete.cmp_gt_new_jump_reg_not_hint import CmpGtNewJumpRegNotHint
+from hexgonulator.v67.instructions.concrete.cmp_gt_reg_new_jump import CmpGtRegNewJump
+from hexgonulator.v67.instructions.concrete.cmp_gt_reg_new_jump_hint import CmpGtRegNewJumpHint
+from hexgonulator.v67.instructions.concrete.cmp_gt_reg_new_jump_not import CmpGtRegNewJumpNot
+from hexgonulator.v67.instructions.concrete.cmp_gt_reg_new_jump_not_hint import CmpGtRegNewJumpNotHint
 from hexgonulator.v67.instructions.concrete.cmp_gtu_and_jump_p0_imm import CmpGtuAndJumpP0Imm
 from hexgonulator.v67.instructions.concrete.cmp_gtu_and_jump_p0_imm_hint import CmpGtuAndJumpP0ImmHint
 from hexgonulator.v67.instructions.concrete.cmp_gtu_and_jump_p0_imm_not import CmpGtuAndJumpP0ImmNot
@@ -65,6 +93,18 @@ from hexgonulator.v67.instructions.concrete.cmp_gtu_and_jump_p1_reg import CmpGt
 from hexgonulator.v67.instructions.concrete.cmp_gtu_and_jump_p1_reg_hint import CmpGtuAndJumpP1RegHint
 from hexgonulator.v67.instructions.concrete.cmp_gtu_and_jump_p1_reg_not import CmpGtuAndJumpP1RegNot
 from hexgonulator.v67.instructions.concrete.cmp_gtu_and_jump_p1_reg_not_hint import CmpGtuAndJumpP1RegNotHint
+from hexgonulator.v67.instructions.concrete.cmp_gtu_new_jump_imm import CmpGtuNewJumpImm
+from hexgonulator.v67.instructions.concrete.cmp_gtu_new_jump_imm_hint import CmpGtuNewJumpImmHint
+from hexgonulator.v67.instructions.concrete.cmp_gtu_new_jump_imm_not import CmpGtuNewJumpImmNot
+from hexgonulator.v67.instructions.concrete.cmp_gtu_new_jump_imm_not_hint import CmpGtuNewJumpImmNotHint
+from hexgonulator.v67.instructions.concrete.cmp_gtu_new_jump_reg import CmpGtuNewJumpReg
+from hexgonulator.v67.instructions.concrete.cmp_gtu_new_jump_reg_hint import CmpGtuNewJumpRegHint
+from hexgonulator.v67.instructions.concrete.cmp_gtu_new_jump_reg_not import CmpGtuNewJumpRegNot
+from hexgonulator.v67.instructions.concrete.cmp_gtu_new_jump_reg_not_hint import CmpGtuNewJumpRegNotHint
+from hexgonulator.v67.instructions.concrete.cmp_gtu_reg_new_jump import CmpGtuRegNewJump
+from hexgonulator.v67.instructions.concrete.cmp_gtu_reg_new_jump_hint import CmpGtuRegNewJumpHint
+from hexgonulator.v67.instructions.concrete.cmp_gtu_reg_new_jump_not import CmpGtuRegNewJumpNot
+from hexgonulator.v67.instructions.concrete.cmp_gtu_reg_new_jump_not_hint import CmpGtuRegNewJumpNotHint
 from hexgonulator.v67.instructions.concrete.conditional_call import ConditionalCall
 from hexgonulator.v67.instructions.concrete.conditional_call_not import ConditionalCallNot
 from hexgonulator.v67.instructions.concrete.conditional_callr import ConditionalCallr
@@ -106,6 +146,10 @@ from hexgonulator.v67.instructions.concrete.tstbit_and_jump_p1 import TstbitAndJ
 from hexgonulator.v67.instructions.concrete.tstbit_and_jump_p1_hint import TstbitAndJumpP1Hint
 from hexgonulator.v67.instructions.concrete.tstbit_and_jump_p1_not import TstbitAndJumpP1Not
 from hexgonulator.v67.instructions.concrete.tstbit_and_jump_p1_not_hint import TstbitAndJumpP1NotHint
+from hexgonulator.v67.instructions.concrete.tstbit_new_jump import TstbitNewJump
+from hexgonulator.v67.instructions.concrete.tstbit_new_jump_hint import TstbitNewJumpHint
+from hexgonulator.v67.instructions.concrete.tstbit_new_jump_not import TstbitNewJumpNot
+from hexgonulator.v67.instructions.concrete.tstbit_new_jump_not_hint import TstbitNewJumpNotHint
 
 DECODING_27_21 = {
     0b0000101: Callr,
@@ -232,6 +276,56 @@ CONDITIONAL_JUMP_REG_OP_HINT = {
     (0b11, 0b1): ConditionalJumpRegLtZeroHint,
 }
 
+CMP_REG_NEW_OP_NOT_HINT = {
+    (0b000, 0b0, 0b0): CmpEqNewJumpReg,
+    (0b000, 0b0, 0b1): CmpEqNewJumpRegHint,
+    (0b000, 0b1, 0b0): CmpEqNewJumpRegNot,
+    (0b000, 0b1, 0b1): CmpEqNewJumpRegNotHint,
+    (0b001, 0b0, 0b0): CmpGtNewJumpReg,
+    (0b001, 0b0, 0b1): CmpGtNewJumpRegHint,
+    (0b001, 0b1, 0b0): CmpGtNewJumpRegNot,
+    (0b001, 0b1, 0b1): CmpGtNewJumpRegNotHint,
+    (0b010, 0b0, 0b0): CmpGtuNewJumpReg,
+    (0b010, 0b0, 0b1): CmpGtuNewJumpRegHint,
+    (0b010, 0b1, 0b0): CmpGtuNewJumpRegNot,
+    (0b010, 0b1, 0b1): CmpGtuNewJumpRegNotHint,
+    (0b011, 0b0, 0b0): CmpGtRegNewJump,
+    (0b011, 0b0, 0b1): CmpGtRegNewJumpHint,
+    (0b011, 0b1, 0b0): CmpGtRegNewJumpNot,
+    (0b011, 0b1, 0b1): CmpGtRegNewJumpNotHint,
+    (0b100, 0b0, 0b0): CmpGtuRegNewJump,
+    (0b100, 0b0, 0b1): CmpGtuRegNewJumpHint,
+    (0b100, 0b1, 0b0): CmpGtuRegNewJumpNot,
+    (0b100, 0b1, 0b1): CmpGtuRegNewJumpNotHint,
+}
+
+CMP_IMM_NEW_OP_NOT_HINT = {
+    (0b000, 0b0, 0b0): CmpEqNewJumpImm,
+    (0b000, 0b0, 0b1): CmpEqNewJumpImmHint,
+    (0b000, 0b1, 0b0): CmpEqNewJumpImmNot,
+    (0b000, 0b1, 0b1): CmpEqNewJumpImmNotHint,
+    (0b001, 0b0, 0b0): CmpGtNewJumpImm,
+    (0b001, 0b0, 0b1): CmpGtNewJumpImmHint,
+    (0b001, 0b1, 0b0): CmpGtNewJumpImmNot,
+    (0b001, 0b1, 0b1): CmpGtNewJumpImmNotHint,
+    (0b010, 0b0, 0b0): CmpGtuNewJumpImm,
+    (0b010, 0b0, 0b1): CmpGtuNewJumpImmHint,
+    (0b010, 0b1, 0b0): CmpGtuNewJumpImmNot,
+    (0b010, 0b1, 0b1): CmpGtuNewJumpImmNotHint,
+    (0b011, 0b0, 0b0): TstbitNewJump,
+    (0b011, 0b0, 0b1): TstbitNewJumpHint,
+    (0b011, 0b1, 0b0): TstbitNewJumpNot,
+    (0b011, 0b1, 0b1): TstbitNewJumpNotHint,
+    (0b100, 0b0, 0b0): CmpEqNewJumpMinus1,
+    (0b100, 0b0, 0b1): CmpEqNewJumpMinus1Hint,
+    (0b100, 0b1, 0b0): CmpEqNewJumpMinus1Not,
+    (0b100, 0b1, 0b1): CmpEqNewJumpMinus1NotHint,
+    (0b101, 0b0, 0b0): CmpGtNewJumpMinus1,
+    (0b101, 0b0, 0b1): CmpGtNewJumpMinus1Hint,
+    (0b101, 0b1, 0b0): CmpGtNewJumpMinus1Not,
+    (0b101, 0b1, 0b1): CmpGtNewJumpMinus1NotHint,
+}
+
 
 def decode_jr_class(instruction):
     bits_27_21 = substring(instruction, 27, 21)
@@ -278,6 +372,15 @@ def decode_j_class_1(instruction):
         return TransferAndJumpImm
     if substring(instruction, 27, 24) == 0b0111:
         return TransferAndJumpReg
+
+
+def decode_j_class_2(instruction):
+    bits_27_26 = substring(instruction, 27, 26)
+    bits_25_23 = substring(instruction, 25, 23)
+    if bits_27_26 == 0b00 and bits_25_23 <= 0b100:
+        return CMP_REG_NEW_OP_NOT_HINT[bits_25_23, bit_at(instruction, 22), bit_at(instruction, 13)]
+    if bits_27_26 == 0b01 and bits_25_23 <= 0b101:
+        return CMP_IMM_NEW_OP_NOT_HINT[bits_25_23, bit_at(instruction, 22), bit_at(instruction, 13)]
 
 
 def decode_j_class_6(instruction):

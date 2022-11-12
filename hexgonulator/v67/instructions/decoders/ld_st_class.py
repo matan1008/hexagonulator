@@ -122,6 +122,16 @@ from hexgonulator.v67.instructions.concrete.memb_fifo_inc_reg_brev import MembFi
 from hexgonulator.v67.instructions.concrete.memb_fifo_m_circ import MembFifoMCirc
 from hexgonulator.v67.instructions.concrete.memb_fifo_reg_imm import MembFifoRegImm
 from hexgonulator.v67.instructions.concrete.memb_fifo_set_imm import MembFifoSetImm
+from hexgonulator.v67.instructions.concrete.memb_new_gp_imm import MembNewGpImm
+from hexgonulator.v67.instructions.concrete.memb_new_im_circ import MembNewImCirc
+from hexgonulator.v67.instructions.concrete.memb_new_imm_reg_off import MembNewImmRegOff
+from hexgonulator.v67.instructions.concrete.memb_new_inc_imm import MembNewIncImm
+from hexgonulator.v67.instructions.concrete.memb_new_inc_reg import MembNewIncReg
+from hexgonulator.v67.instructions.concrete.memb_new_inc_reg_brev import MembNewIncRegBrev
+from hexgonulator.v67.instructions.concrete.memb_new_m_circ import MembNewMCirc
+from hexgonulator.v67.instructions.concrete.memb_new_reg_imm import MembNewRegImm
+from hexgonulator.v67.instructions.concrete.memb_new_reg_reg_off import MembNewRegRegOff
+from hexgonulator.v67.instructions.concrete.memb_new_set_imm import MembNewSetImm
 from hexgonulator.v67.instructions.concrete.memb_or_reg import MembOrReg
 from hexgonulator.v67.instructions.concrete.memb_setbit import MembSetbit
 from hexgonulator.v67.instructions.concrete.memb_sub_imm import MembSubImm
@@ -558,6 +568,8 @@ def decode_class_3(instruction):
         return MEMOP_MEMW_REG_OP[substring(instruction, 6, 5)]
     if bits_27_24 == 0b1111 and substring(instruction, 22, 21) == 0b10 and bit_at(instruction, 13) == 0b0:
         return MEMOP_MEMW_IMM_OP[substring(instruction, 6, 5)]
+    if bits_27_21 == 0b1011101:
+        return MembNewRegRegOff
 
 
 def decode_class_4(instruction):
@@ -587,6 +599,8 @@ def decode_class_4(instruction):
         return ReadWGpImm
     if bit_27 == 0b0 and bits_24_21 == 0b1100:
         return CONDITIONAL_READ_W_REG_IMM_NOT_NEW[bit_at(instruction, 26), bit_at(instruction, 25)]
+    if bit_27 == 0b1 and bits_24_21 == 0b0101:
+        return MembNewGpImm
 
 
 def decode_class_9(instruction):
@@ -768,3 +782,25 @@ def decode_class_9(instruction):
         return MEMBH_INC_REG_PAIR_SIGN[bit_at(instruction, 23), bit_at(instruction, 22)]
     if bits_27_21 & 0b1111001 == 0b1110001 and bit_12 == 0b0 and bit_7 == 0b0:
         return MEMBH_INC_REG_BREV_PAIR_SIGN[bit_at(instruction, 23), bit_at(instruction, 22)]
+
+
+def decode_class_10(instruction):
+    bit_27 = bit_at(instruction, 27)
+    bits_24_21 = substring(instruction, 24, 21)
+    bits_27_21 = substring(instruction, 27, 21)
+    if bit_27 == 0b0 and bits_24_21 == 0b1101:
+        return MembNewRegImm
+    if bits_27_21 == 0b1001101 and bit_at(instruction, 1) == 0b1:
+        return MembNewMCirc
+    if bits_27_21 == 0b1001101 and bit_at(instruction, 1) == 0b0:
+        return MembNewImCirc
+    if bits_27_21 == 0b1011101 and bit_at(instruction, 7) == 0b1:
+        return MembNewSetImm
+    if bits_27_21 == 0b1011101 and bit_at(instruction, 7) == 0b0:
+        return MembNewIncImm
+    if bits_27_21 == 0b1101101 and bit_at(instruction, 7) == 0b1:
+        return MembNewImmRegOff
+    if bits_27_21 == 0b1101101 and bit_at(instruction, 7) == 0b0:
+        return MembNewIncReg
+    if bits_27_21 == 0b1111101:
+        return MembNewIncRegBrev

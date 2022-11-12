@@ -2,7 +2,7 @@ from hexgonulator.common.bits_ops import substring
 from .alu32_class import decode_alu_32_class
 from .cr_class import decode_cr_class
 from .j_class import decode_j_jr_class, decode_j_class_1, decode_j_class_2
-from .ld_st_class import decode_class_3, decode_class_4, decode_class_9
+from .ld_st_class import decode_class_3, decode_class_4, decode_class_9, decode_class_10
 from ..concrete.constant_extender import ConstantExtender
 
 DECODERS = {
@@ -15,6 +15,7 @@ DECODERS = {
     0b0110: decode_cr_class,
     0b0111: decode_alu_32_class,
     0b1001: decode_class_9,
+    0b1010: decode_class_10,
     0b1011: decode_alu_32_class,
     0b1111: decode_alu_32_class,
 }

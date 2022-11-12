@@ -32,7 +32,7 @@ def test_memb_fifo_m_circ_overflow(hexagon):
 
 
 def test_memb_fifo_m_circ_underflow(hexagon):
-    hexagon.memory.controllers[0].mem.write(0, 4, b'\xe1\xc1\x80\x98')
+    hexagon.memory.controllers[0].mem.write(0, 4, b'\x01\xc2\x80\x98')
     add_memory(hexagon, b'\x77\x00\x00\x00', 0x40000020)
     hexagon.registers.m0.i = 0b11111111111
     hexagon.registers.m0.length = 0x10

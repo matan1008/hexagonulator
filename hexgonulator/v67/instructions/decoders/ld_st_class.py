@@ -6,6 +6,23 @@ from hexgonulator.v67.instructions.concrete.conditional_dealloc_return_not impor
 from hexgonulator.v67.instructions.concrete.conditional_dealloc_return_not_new import ConditionalDeallocReturnNotNew
 from hexgonulator.v67.instructions.concrete.conditional_dealloc_return_not_new_hint import \
     ConditionalDeallocReturnNotNewHint
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_imm import ConditionalMembNewImm
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_imm_new import ConditionalMembNewImmNew
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_imm_not import ConditionalMembNewImmNot
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_imm_not_new import ConditionalMembNewImmNotNew
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_inc_imm import ConditionalMembNewIncImm
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_inc_imm_new import ConditionalMembNewIncImmNew
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_inc_imm_not import ConditionalMembNewIncImmNot
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_inc_imm_not_new import ConditionalMembNewIncImmNotNew
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_reg_imm import ConditionalMembNewRegImm
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_reg_imm_new import ConditionalMembNewRegImmNew
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_reg_imm_not import ConditionalMembNewRegImmNot
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_reg_imm_not_new import ConditionalMembNewRegImmNotNew
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_reg_reg_off import ConditionalMembNewRegRegOff
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_reg_reg_off_new import ConditionalMembNewRegRegOffNew
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_reg_reg_off_not import ConditionalMembNewRegRegOffNot
+from hexgonulator.v67.instructions.concrete.conditional_memb_new_reg_reg_off_not_new import \
+    ConditionalMembNewRegRegOffNotNew
 from hexgonulator.v67.instructions.concrete.conditional_read_b_imm import ConditionalReadBImm
 from hexgonulator.v67.instructions.concrete.conditional_read_b_imm_new import ConditionalReadBImmNew
 from hexgonulator.v67.instructions.concrete.conditional_read_b_imm_not import ConditionalReadBImmNot
@@ -528,6 +545,34 @@ MEMOP_MEMW_IMM_OP = {
     0b11: MemwSetbit,
 }
 
+CONDITIONAL_MEMB_NEW_REG_REG_OFF_NEW_NOT = {
+    (0b0, 0b0): ConditionalMembNewRegRegOff,
+    (0b0, 0b1): ConditionalMembNewRegRegOffNot,
+    (0b1, 0b0): ConditionalMembNewRegRegOffNew,
+    (0b1, 0b1): ConditionalMembNewRegRegOffNotNew,
+}
+
+CONDITIONAL_MEMB_NEW_REG_IMM_NOT_NEW = {
+    (0b0, 0b0): ConditionalMembNewRegImm,
+    (0b0, 0b1): ConditionalMembNewRegImmNew,
+    (0b1, 0b0): ConditionalMembNewRegImmNot,
+    (0b1, 0b1): ConditionalMembNewRegImmNotNew,
+}
+
+CONDITIONAL_MEMB_NEW_INC_IMM_NEW_NOT = {
+    (0b0, 0b0): ConditionalMembNewIncImm,
+    (0b0, 0b1): ConditionalMembNewIncImmNot,
+    (0b1, 0b0): ConditionalMembNewIncImmNew,
+    (0b1, 0b1): ConditionalMembNewIncImmNotNew,
+}
+
+CONDITIONAL_MEMB_NEW_IMM_NEW_NOT = {
+    (0b0, 0b0): ConditionalMembNewImm,
+    (0b0, 0b1): ConditionalMembNewImmNot,
+    (0b1, 0b0): ConditionalMembNewImmNew,
+    (0b1, 0b1): ConditionalMembNewImmNotNew,
+}
+
 
 def decode_class_3(instruction):
     bits_27_21 = substring(instruction, 27, 21)
@@ -570,6 +615,8 @@ def decode_class_3(instruction):
         return MEMOP_MEMW_IMM_OP[substring(instruction, 6, 5)]
     if bits_27_21 == 0b1011101:
         return MembNewRegRegOff
+    if substring(instruction, 27, 26) == 0b01 and substring(instruction, 23, 21) == 0b101:
+        return CONDITIONAL_MEMB_NEW_REG_REG_OFF_NEW_NOT[bit_at(instruction, 25), bit_at(instruction, 24)]
 
 
 def decode_class_4(instruction):
@@ -601,6 +648,8 @@ def decode_class_4(instruction):
         return CONDITIONAL_READ_W_REG_IMM_NOT_NEW[bit_at(instruction, 26), bit_at(instruction, 25)]
     if bit_27 == 0b1 and bits_24_21 == 0b0101:
         return MembNewGpImm
+    if bit_27 == 0b0 and bits_24_21 == 0b0101:
+        return CONDITIONAL_MEMB_NEW_REG_IMM_NOT_NEW[bit_at(instruction, 26), bit_at(instruction, 25)]
 
 
 def decode_class_9(instruction):
@@ -788,19 +837,25 @@ def decode_class_10(instruction):
     bit_27 = bit_at(instruction, 27)
     bits_24_21 = substring(instruction, 24, 21)
     bits_27_21 = substring(instruction, 27, 21)
+    bits_13_11 = substring(instruction, 13, 11)
+    bit_7 = bit_at(instruction, 7)
     if bit_27 == 0b0 and bits_24_21 == 0b1101:
         return MembNewRegImm
     if bits_27_21 == 0b1001101 and bit_at(instruction, 1) == 0b1:
         return MembNewMCirc
     if bits_27_21 == 0b1001101 and bit_at(instruction, 1) == 0b0:
         return MembNewImCirc
-    if bits_27_21 == 0b1011101 and bit_at(instruction, 7) == 0b1:
+    if bits_27_21 == 0b1011101 and bit_7 == 0b1 and bits_13_11 == 0b000:
         return MembNewSetImm
-    if bits_27_21 == 0b1011101 and bit_at(instruction, 7) == 0b0:
+    if bits_27_21 == 0b1011101 and bit_7 == 0b0 and bits_13_11 == 0b000:
         return MembNewIncImm
-    if bits_27_21 == 0b1101101 and bit_at(instruction, 7) == 0b1:
+    if bits_27_21 == 0b1101101 and bit_7 == 0b1:
         return MembNewImmRegOff
-    if bits_27_21 == 0b1101101 and bit_at(instruction, 7) == 0b0:
+    if bits_27_21 == 0b1101101 and bit_7 == 0b0:
         return MembNewIncReg
-    if bits_27_21 == 0b1111101:
+    if bits_27_21 == 0b1111101 and bit_7 == 0b0:
         return MembNewIncRegBrev
+    if bits_27_21 == 0b1011101 and bits_13_11 == 0b100:
+        return CONDITIONAL_MEMB_NEW_INC_IMM_NEW_NOT[bit_7, bit_at(instruction, 2)]
+    if bits_27_21 == 0b1111101 and substring(instruction, 12, 11) == 0b00 and bit_7 == 0b1:
+        return CONDITIONAL_MEMB_NEW_IMM_NEW_NOT[bit_at(instruction, 13), bit_at(instruction, 2)]
